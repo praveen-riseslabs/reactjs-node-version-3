@@ -36,7 +36,7 @@ function App() {
       if (confirmPassword !== userData.password)
         throw Error("confirm password is incorrect");
       setLoading(true);
-      await axios.post(process.env.REACT_APP_SERVER_API, {
+      await axios.post(`${process.env.REACT_APP_SERVER_API}/user/register`, {
         username: userData.username,
         fullname: userData.fullname,
         email: userData.email,
