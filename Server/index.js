@@ -19,5 +19,5 @@ connectDb(process.env.MONGO_URI, process.env.DB_NAME);
 
 //starting the server
 app.listen(port, () => {
-  console.log(`listening on port: ${port}`);
+  console.log(`listening on port: ${port} - http://localhost:${port}`);
 });
