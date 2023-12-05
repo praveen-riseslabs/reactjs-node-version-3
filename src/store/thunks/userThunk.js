@@ -23,9 +23,9 @@ const loginUser = createAsyncThunk("user/login", async (data) => {
 });
 
 //get user details
-const getUserDetails = createAsyncThunk("user/details", async (email) => {
+const getUserDetails = createAsyncThunk("user/details", async (userId) => {
   try {
-    const user = await userApi.get(`/user/${email}`);
+    const user = await userApi.get(`/user/${userId}`);
 
     return user.data;
   } catch (err) {
@@ -33,4 +33,15 @@ const getUserDetails = createAsyncThunk("user/details", async (email) => {
   }
 });
 
-export { registerUser, loginUser, getUserDetails };
+//verify user
+const verifyUser = createAsyncThunk("user/verify", async (emailToken) => {
+  try {
+    const verify = await userApi.post("/user/verify", { emailToken });
+
+    return verify.data;
+  } catch (err) {
+    throw Error(err.response.data.error);
+  }
+});
+
+export { registerUser, loginUser, getUserDetails, verifyUser };

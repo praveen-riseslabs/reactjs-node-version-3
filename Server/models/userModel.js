@@ -21,12 +21,19 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    enum:["male", "female", "preferNotToSay"],
+    enum: ["male", "female", "preferNotToSay"],
     default: "male",
   },
   password: {
     type: String,
     required: true,
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  emailToken: {
+    type: String,
   },
 });
 
