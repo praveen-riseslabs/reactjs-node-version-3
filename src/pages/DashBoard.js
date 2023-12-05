@@ -12,8 +12,8 @@ function DashBoard() {
 
   //navigating if user is logged in
   useEffect(() => {
-    if (loggedIn) doGetUserDetails(user?.email);
-  }, [loggedIn, doGetUserDetails, user?.email]);
+    if (loggedIn) doGetUserDetails(user?.userId);
+  }, [loggedIn, doGetUserDetails, user?.userId]);
 
   return (
     !loadingUserDetails &&
@@ -24,6 +24,7 @@ function DashBoard() {
         <div>Email: {user?.email}</div>
         <div>phoneNumber: {user?.phoneNumber}</div>
         <div>Gender: {user?.gender}</div>
+        <div>verified: {(user?.isVerified).toString()}</div>
       </div>
     )
   );

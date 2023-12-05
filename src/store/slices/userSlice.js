@@ -1,11 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserDetails, loginUser, registerUser } from "../thunks/userThunk";
+import {
+  getUserDetails,
+  loginUser,
+  registerUser,
+  verifyUser,
+} from "../thunks/userThunk";
 
 const userSlice = createSlice({
   name: "user",
   initialState: {
     user: {},
     loggedIn: false,
+    isVerified: false,
   },
   extraReducers(builder) {
     //case : registering new user
@@ -23,6 +29,13 @@ const userSlice = createSlice({
     builder.addCase(getUserDetails.fulfilled, (state, action) => {
       state.user = action.payload;
       state.loggedIn = true;
+    });
+
+    //case : verify user
+    builder.addCase(verifyUser.fulfilled, (state, action) => {
+      action.payload.msg = "success"
+        ? (state.isVerified = true)
+        : (state.isVerified = false);
     });
   },
 });
