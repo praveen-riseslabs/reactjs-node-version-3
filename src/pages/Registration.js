@@ -13,8 +13,9 @@ function Registration() {
   const navigate = useNavigate();
 
   const {
+    reset,
     register,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful },
     handleSubmit,
   } = useForm({ mode: "all" });
 
@@ -60,6 +61,10 @@ function Registration() {
 
     const userData = {...data, gender}
     await doRegisterUser(userData);
+
+    if(isSubmitSuccessful){
+      reset()
+    }
   };
 
   //navigating after user successfully registered 

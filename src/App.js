@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import DashBoard from "./pages/DashBoard";
 import AuthUser from "./components/AuthUser";
 import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       <Route path="/verify/:token" element={<VerifyEmail />} />
+      <Route path="/forgotpassword" element={<ForgotPassword />} />
+      <Route path="/resetpassword/:userId" element={<ResetPassword />} />
     </Routes>
   );
 }

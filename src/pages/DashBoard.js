@@ -24,7 +24,7 @@ function DashBoard() {
         <div>Email: {user?.email}</div>
         <div>phoneNumber: {user?.phoneNumber}</div>
         <div>Gender: {user?.gender}</div>
-        <div>verified: {(user?.isVerified).toString()}</div>
+        <div>verified: {(user?.isVerified)?.toString()}</div>
       </div>
     )
   );

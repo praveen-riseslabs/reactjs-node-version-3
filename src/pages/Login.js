@@ -113,7 +113,7 @@ function Login() {
 
         {/* alt navigation */}
         <div className="mt-2 text-center">
-          <div>Forget password</div>
+          <Link to="/forgotpassword" className="text-decoration-none">Forget password</Link>
           <div>
             Don't have an Account?{" "}
             <Link to="/register" className="text-decoration-none">

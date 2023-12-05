@@ -44,4 +44,29 @@ const verifyUser = createAsyncThunk("user/verify", async (emailToken) => {
   }
 });
 
-export { registerUser, loginUser, getUserDetails, verifyUser };
+//forgot password
+const requestForgotPassword = createAsyncThunk(
+  "user/requestResetPassword",
+  async (email) => {
+    try {
+      await userApi.post("/user/forgotpassword", { email });
+    } catch (err) {
+      throw Error(err.response.data.error);
+    }
+  }
+);
+
+//reset password
+const resetPassword = createAsyncThunk(
+  "user/resetPassword",
+  async (data) => {
+    try {
+      const {userId, newPassword} = data;
+      await userApi.put("/user/resetpassword", { userId, newPassword });
+    } catch (err) {
+      throw Error(err.response.data.error);
+    }
+  }
+);
+
+export { registerUser, loginUser, getUserDetails, verifyUser, requestForgotPassword, resetPassword };

@@ -56,10 +56,10 @@ class UserController {
       //mail options (what to whom)
       const mailOptions = {
         from: {
-          name: "testing name nodemailer testing",
+          name: "RisesLabs",
           address: mailConfig.email,
         },
-        to: "ktidke3@gmail.com", // list of receivers
+        to: email, // list of receivers
         subject: "verify your email", // Subject line
         html: `
         <div style="width:100%;">
@@ -190,7 +190,102 @@ class UserController {
       });
 
       res.status(200).json({
-        status: "200",
+        status: 200,
+        msg: "success",
+      });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  //reseting user password
+  static async resetPassword(req, res) {
+    try {
+      const { userId, newPassword } = req.body;
+
+      if (!newPassword) {
+        throw new Error("Enter new password");
+      }
+
+      //encrypting password
+      const salt = await bcrypt.genSalt(Number(process.env.SALT_VALUE));
+      const hash = await bcrypt.hash(newPassword, salt);
+
+      await userModel.findByIdAndUpdate(userId, {
+        $set: { password: hash },
+      });
+
+      res.status(200).json({
+        status: 200,
+        msg: "success",
+      });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  //sending password reset link
+  static async forgotPassword(req, res) {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        throw new Error("Enter your email address");
+      }
+
+      const user = await userModel.findOne({ email });
+
+      if(!user){
+        throw new Error("Please enter a valid email address");
+      }
+
+
+      //mail options (what to whom)
+      const mailOptions = {
+        from: {
+          name: "RisesLabs",
+          address: mailConfig.email,
+        },
+        to: email, // list of receivers
+        subject: "reset password link", // Subject line
+        html: `
+        <div style="width:100%;">
+        <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          gap: 2rem;
+        "
+      >
+        <h3>Please click on the below link to reset your password</h3>
+        <div>
+        <a href="${process.env.CLIENT_URL}/resetpassword/${user._id}" target="_blank" rel="noreferrer">
+          <button
+            style="
+              padding-inline: 1rem;
+              padding-block: 0.3rem;
+              font-weight: 600;
+              border-radius: 0.5rem;
+              color: white;
+              font-size: 1.1rem;
+              background: linear-gradient(to right, #009dff, #8a2be2);
+            "
+          >
+            Reset Link
+          </button>
+        </a>
+        </div>
+      </div>
+      </div>
+          `, // html body
+      };
+
+      sendMail(mailTransporter, mailOptions);
+
+      res.status(200).json({
+        status: 200,
         msg: "success",
       });
     } catch (err) {
