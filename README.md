@@ -25,3 +25,4 @@ Development setup steps
             * EMAIL (auth.user (string) email address of the sender acc)
             * APP_PASS (auth.pass (string) password of the sender acc)
       3. to run the app use "npm run start" command
+
