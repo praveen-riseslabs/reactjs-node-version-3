@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { userReducer } from "./slices/userSlice";
+import { userReducer, logoutUser } from "./slices/userSlice";
 
 
 const store = configureStore({
@@ -8,6 +8,6 @@ const store = configureStore({
     }
 })
 
-export {store}
+export {store, logoutUser}
 
 export * from "./thunks/userThunk"

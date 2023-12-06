@@ -1,32 +1,30 @@
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useThunk } from "../hooks/useThunk";
-import { getUserDetails } from "../store";
+import { Outlet } from "react-router-dom";
+import SideBar from "../components/shared/SideBar";
+import Header from "../components/shared/Header";
 
 function DashBoard() {
-  //extracting user state and loggedIn state from store
-  const { user, loggedIn } = useSelector((state) => state.user);
-
-  const [doGetUserDetails, loadingUserDetails, errorUserDetails] =
-    useThunk(getUserDetails);
-
-  //navigating if user is logged in
-  useEffect(() => {
-    if (loggedIn) doGetUserDetails(user?.userId);
-  }, [loggedIn, doGetUserDetails, user?.userId]);
-
   return (
-    !loadingUserDetails &&
-    !errorUserDetails && (
-      <div>
-        <div>Fullname: {user?.fullname}</div>
-        <div>Username : {user?.username}</div>
-        <div>Email: {user?.email}</div>
-        <div>phoneNumber: {user?.phoneNumber}</div>
-        <div>Gender: {user?.gender}</div>
-        <div>verified: {(user?.isVerified)?.toString()}</div>
+    <div className="container-fluid">
+      <div className="row">
+        <div
+          className="col-2 bg-dark text-white p-0"
+          style={{ height: "100vh" }}
+        >
+          <div className="px-4 py-3 align-items-center fw-bold">Windmill</div>
+          <div className="">
+            <SideBar />
+          </div>
+        </div>
+        <div className="col g-0 bg-black">
+          {/* header bar */}
+          <Header />
+          {/* main section */}
+          <div className="text-white">
+            <Outlet />
+          </div>
+        </div>
       </div>
-    )
+    </div>
   );
 }
 

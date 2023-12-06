@@ -1,0 +1,36 @@
+import PeopleIcon from "@mui/icons-material/People";
+import GroupsIcon from "@mui/icons-material/Groups";
+import { NavLink } from "react-router-dom";
+
+function SideBar() {
+  const sidebarLinks = [
+    { label: "Friends", to: "/friends", icon: <PeopleIcon /> },
+    { label: "Teams", to: "/teams", icon: <GroupsIcon /> },
+  ];
+
+  const linkStyle = ({ isActive }) => {
+    if (isActive) {
+      return {
+        borderLeft: "4px solid #8a2be2",
+        textDecoration: "none",
+        color:"white"
+    };
+} else {
+    return {
+        textDecoration: "none",
+        color:"gray"
+      };
+    }
+  };
+
+  return sidebarLinks.map((link) => {
+    return (
+      <NavLink key={link.label} to={link.to} style={linkStyle} className="py-2 px-3 d-flex align-items-center">
+        {link.icon}
+        <label className="px-2">{link.label}</label>
+      </NavLink>
+    );
+  });
+}
+
+export default SideBar;

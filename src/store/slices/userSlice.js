@@ -13,7 +13,15 @@ const userSlice = createSlice({
     user: {},
     loggedIn: false,
     isVerified: false,
-    emailSent: false
+    emailSent: false,
+  },
+  reducers: {
+    //user logout
+    logoutUser(state, action) {
+      state.user = {};
+      state.loggedIn = false;
+      state.emailSent = false;
+    },
   },
   extraReducers(builder) {
     //case : registering new user
@@ -50,3 +58,4 @@ const userSlice = createSlice({
 });
 
 export const userReducer = userSlice.reducer;
+export const {logoutUser} = userSlice.actions

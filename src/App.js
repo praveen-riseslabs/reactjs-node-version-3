@@ -6,6 +6,9 @@ import AuthUser from "./components/AuthUser";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Friends from "./components/shared/Friends";
+import Teams from "./components/shared/Teams";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -17,7 +20,12 @@ function App() {
             <DashBoard />
           </AuthUser>
         }
-      />
+      >
+        <Route index element={<Friends />} />
+        <Route path="friends" element={<Friends />} />
+        <Route path="teams" element={<Teams />} />
+        <Route path="profile" element={<Profile />} />
+      </Route>
       <Route path="/register" element={<Registration />} />
       <Route path="/login" element={<Login />} />
 
