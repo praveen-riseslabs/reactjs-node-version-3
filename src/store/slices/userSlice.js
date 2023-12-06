@@ -3,6 +3,7 @@ import {
   getUserDetails,
   loginUser,
   registerUser,
+  requestForgotPassword,
   verifyUser,
 } from "../thunks/userThunk";
 
@@ -12,6 +13,7 @@ const userSlice = createSlice({
     user: {},
     loggedIn: false,
     isVerified: false,
+    emailSent: false
   },
   extraReducers(builder) {
     //case : registering new user
@@ -36,6 +38,13 @@ const userSlice = createSlice({
       action.payload.msg = "success"
         ? (state.isVerified = true)
         : (state.isVerified = false);
+    });
+
+    //case : send reset password link
+    builder.addCase(requestForgotPassword.fulfilled, (state, action) => {
+      action.payload.msg = "success"
+        ? (state.emailSent = true)
+        : (state.emailSent = false);
     });
   },
 });
