@@ -49,7 +49,9 @@ const requestForgotPassword = createAsyncThunk(
   "user/requestResetPassword",
   async (email) => {
     try {
-      await userApi.post("/user/forgotpassword", { email });
+     const data =  await userApi.post("/user/forgotpassword", { email });
+
+     return data.data
     } catch (err) {
       throw Error(err.response.data.error);
     }

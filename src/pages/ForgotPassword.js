@@ -1,16 +1,32 @@
-import { useState } from "react";
 import { requestForgotPassword } from "../store";
 import { useThunk } from "../hooks/useThunk";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 function ForgotPassword() {
-  const [email, setEmail] = useState("");
+  //extracting emailsent state from store
+  const { emailSent } = useSelector((state) => state.user);
 
-  
-  const [doRequestForgotPassword, loadingRequestForgotPassword, errorRequestForgotPassword] = useThunk(requestForgotPassword)
+  const {
+    register,
+    formState: { isSubmitSuccessful },
+    reset,
+    handleSubmit,
+  } = useForm({ mode: "all" });
 
-  const handleSubmit = (e) => {
+  const [
+    doRequestForgotPassword,
+    loadingRequestForgotPassword,
+    errorRequestForgotPassword,
+  ] = useThunk(requestForgotPassword);
+
+  const onSubmitHandler = (data, e) => {
     e.preventDefault();
-    doRequestForgotPassword(email)
+    doRequestForgotPassword(data.email);
+
+    if (isSubmitSuccessful) {
+      reset();
+    }
   };
 
   return (
@@ -24,7 +40,7 @@ function ForgotPassword() {
       <form
         className="position-absolute top-50 start-50 translate-middle border p-4 rounded bg-light"
         style={{ width: "40rem" }}
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmitHandler)}
       >
         <h1>
           <span
@@ -44,20 +60,15 @@ function ForgotPassword() {
             <label className="form-label">Email</label>
             <input
               type="email"
+              name="email"
               className={`form-control ${
                 errorRequestForgotPassword && "is-invalid"
               }`}
               placeholder="Enter your email address"
-              value={email}
-              onChange={e=> setEmail(e.target.value)}
+              {...register("email")}
             />
             <div className="invalid-feedback">Invalid Email</div>
           </div>
-        </div>
-
-        {/* server side error handling */}
-        <div className="text-danger mt-3">
-          {errorRequestForgotPassword && `* ${errorRequestForgotPassword}`}
         </div>
 
         {/* submit button */}
@@ -68,7 +79,7 @@ function ForgotPassword() {
             style={{
               background: "linear-gradient(to right, #009dff, #8a2be2)",
             }}
-            disabled={loadingRequestForgotPassword || errorRequestForgotPassword}
+            disabled={loadingRequestForgotPassword || emailSent}
           >
             {loadingRequestForgotPassword ? (
               <div className="spinner-border text-light" role="status">
@@ -80,6 +91,27 @@ function ForgotPassword() {
           </button>
         </div>
       </form>
+
+      {/* reset password link sent successfully */}
+      {isSubmitSuccessful && emailSent && (
+        <div
+          className="alert alert-success alert-dismissible col-3 position-absolute bottom-0 fade show"
+          role="alert"
+        >
+          Reset password link sent successfully
+          <button className="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      ) }
+      
+      {!emailSent && (
+        <div
+          className="alert alert-danger alert-dismissible col-3 position-absolute bottom-0 fade show"
+          role="alert"
+        >
+          Error sending reset password link, please try again
+          <button className="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      )}
     </div>
   );
 }
