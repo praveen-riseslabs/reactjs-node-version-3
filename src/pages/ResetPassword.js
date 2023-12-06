@@ -2,11 +2,12 @@ import { useForm } from "react-hook-form";
 import { validate } from "../constants/registrationFormValidation";
 import { useThunk } from "../hooks/useThunk";
 import { resetPassword } from "../store";
-import { useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
 function ResetPassword() {
-  const [doResetPassword, loadingResetPassword, errorResetPassword] = useThunk(resetPassword);
+  const [doResetPassword, loadingResetPassword, errorResetPassword] =
+    useThunk(resetPassword);
 
   const { userId } = useParams();
 
@@ -29,7 +30,7 @@ function ResetPassword() {
       userId,
     };
 
-    doResetPassword(config)
+    doResetPassword(config);
 
     if (isSubmitSuccessful) {
       reset();
@@ -42,6 +43,13 @@ function ResetPassword() {
       navigate("/login", { replace: true });
     }
   }, [isSubmitSuccessful, navigate]);
+
+  //navigating if userId is undefined
+  useEffect(() => {
+    if (userId === "undefined") {
+      navigate("/login", { replace: true });
+    }
+  }, [navigate, userId]);
 
   return (
     <div
