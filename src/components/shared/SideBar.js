@@ -1,9 +1,12 @@
 import PeopleIcon from "@mui/icons-material/People";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { NavLink } from "react-router-dom";
+import { Dashboard } from "@mui/icons-material";
 
 function SideBar() {
+  // side bar tabs
   const sidebarLinks = [
+    { label: "Dashboard", to: "/", icon: <Dashboard /> },
     { label: "Friends", to: "/friends", icon: <PeopleIcon /> },
     { label: "Teams", to: "/teams", icon: <GroupsIcon /> },
   ];

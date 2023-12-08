@@ -9,6 +9,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Friends from "./components/shared/Friends";
 import Teams from "./components/shared/Teams";
 import Profile from "./components/Profile";
+import Home from "./pages/Home";
 
 function App() {
   return (
@@ -16,12 +17,12 @@ function App() {
       <Route
         path="/"
         element={
-          <AuthUser>
-            <DashBoard />
-          </AuthUser>
+          // <AuthUser>
+          <Home />
+          // </AuthUser>
         }
       >
-        <Route index element={<Friends />} />
+        <Route index element={<DashBoard />} />
         <Route path="friends" element={<Friends />} />
         <Route path="teams" element={<Teams />} />
         <Route path="profile" element={<Profile />} />

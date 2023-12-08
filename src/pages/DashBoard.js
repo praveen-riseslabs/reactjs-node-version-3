@@ -1,29 +1,35 @@
-import { Outlet } from "react-router-dom";
-import SideBar from "../components/shared/SideBar";
-import Header from "../components/shared/Header";
+import { useState } from "react";
+import { userApi } from "../store/api/user";
 
 function DashBoard() {
+  const [file, setFile] = useState();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", file);
+    // await userApi.post("/file/upload", formData, {
+    //   headers: { "Content-Type": "multipart/form-data" },
+    // });
+  };
+  
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <div
-          className="col-2 bg-dark text-white p-0"
-          style={{ height: "100vh" }}
-        >
-          <div className="px-4 py-3 align-items-center fw-bold">Windmill</div>
-          <div className="">
-            <SideBar />
-          </div>
+    <div className="px-3">
+      <h3 className="py-2 fw-bold">Dashboard</h3>
+      <form onSubmit={handleSubmit}>
+        <p>Upload Files</p>
+        <div className=" input-group">
+          <input
+            type="file"
+            name="file"
+            className="form-control"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+          <button className="btn btn-outline-secondary" type="submit">
+            Upload
+          </button>
         </div>
-        <div className="col g-0 bg-black">
-          {/* header bar */}
-          <Header />
-          {/* main section */}
-          <div className="text-white">
-            <Outlet />
-          </div>
-        </div>
-      </div>
+      </form>
     </div>
   );
 }
