@@ -35,28 +35,37 @@ class FileController {
         ContentType: req.file.mimetype,
       };
       const command = new PutObjectCommand(params);
-
       await s3.send(command);
 
+      //ssving the file into Db
       const newFile = new fileModel({ filename });
-
       await newFile.save();
 
-      res.status(201).json(newFile);
+      //get object parma
+      const getParams = {
+        Bucket: bucketName,
+        Key: newFile.filename,
+      };
+
+      const getCommand = new GetObjectCommand(getParams);
+      const signedUrl = await getSignedUrl(s3, getCommand, {
+        expiresIn: Number(process.env.SIGNED_URL_EXPIRATION_VALUE),
+      });
+
+      res.status(201).json({ ...newFile.toObject(), fileUrl: signedUrl });
     } catch (err) {
       res.status(400).json({ error: err.message });
     }
   }
 
   //retriveing all files
-  static async getFiles(req, res) {
+  static async getAllFiles(req, res) {
     try {
       const files = await fileModel.find().sort({ createdAt: -1 });
 
       const updatedFiles = await Promise.all(
         files.map(async (file) => {
-
-            //get object parma
+          //get object params
           const params = {
             Bucket: bucketName,
             Key: file.filename,
