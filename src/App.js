@@ -17,9 +17,9 @@ function App() {
       <Route
         path="/"
         element={
-          // <AuthUser>
-          <Home />
-          // </AuthUser>
+          <AuthUser>
+            <Home />
+          </AuthUser>
         }
       >
         <Route index element={<DashBoard />} />
