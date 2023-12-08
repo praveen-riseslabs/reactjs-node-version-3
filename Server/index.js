@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connectDb } from "./connectDb.js";
 import userRoutes from "./routes/userRoutes.js";
+import fileRoutes from "./routes/fileRoutes.js";
 
 //configuration
 dotenv.config();
@@ -13,6 +14,7 @@ const port = process.env.PORT;
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use("/user", userRoutes);
+app.use("/file", fileRoutes);
 
 // connecting to DB
 connectDb(process.env.MONGO_URI, process.env.DB_NAME);

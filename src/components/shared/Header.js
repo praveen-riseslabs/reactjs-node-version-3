@@ -75,7 +75,7 @@ function Header() {
           <CircularProgress size={24} />
         ) : (
           <IconButton sx={{ padding: 0 }} onClick={handleOpenMenu}>
-            <Avatar alt="aleesf" src="https://picsum.photos/200" />
+            <Avatar alt="user profile avatar" src="https://picsum.photos/200" />
           </IconButton>
         )}
         <Menu anchorEl={anchorEl} open={open} onClose={handleCLoseMenu}>
