@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   gender: {
     type: String,
     enum: ["male", "female", "preferNotToSay"],
-    default: "male",
+    default: "preferNotToSay",
   },
   password: {
     type: String,
@@ -34,6 +34,15 @@ const userSchema = new mongoose.Schema({
   },
   emailToken: {
     type: String,
+    default: null,
+  },
+  googleId: {
+    type: String,
+    default: null,
+  },
+  facebookId: {
+    type: String,
+    default: null,
   },
 });
 

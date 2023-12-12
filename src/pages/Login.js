@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useThunk } from "../hooks/useThunk";
-import { loginUser } from "../store";
+import { googleLogin, loginUser } from "../store";
 import { useSelector } from "react-redux";
+import { GoogleLogin } from "@react-oauth/google";
+import { Divider } from "@mui/material";
 
 function Login() {
   const [userData, setUserData] = useState({
@@ -11,6 +13,7 @@ function Login() {
   });
 
   const [doUserLogin, loadingUserLogin, errorLoginUser] = useThunk(loginUser);
+  const [doGoogleLogin, loadingGoogleLogin] = useThunk(googleLogin);
 
   const navigate = useNavigate();
 
@@ -21,11 +24,21 @@ function Login() {
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
-  
+
   //hanldeFormSubmit
   const handleSubmit = (e) => {
     e.preventDefault();
     doUserLogin(userData);
+  };
+
+  //handle google login successful
+  const handleGoogleLoginSucesss = (res) => {
+    //sending jwt token from google
+    const userData = {
+      token: res.credential,
+      clientId: res.clientId,
+    };
+    doGoogleLogin(userData);
   };
 
   // navigating to dashboard after successful login
@@ -34,7 +47,7 @@ function Login() {
 
     navigate("/", { replace: true });
   }, [navigate, loggedIn]);
-  
+
   return (
     <div
       className="container-fluid"
@@ -99,9 +112,9 @@ function Login() {
             style={{
               background: "linear-gradient(to right, #009dff, #8a2be2)",
             }}
-            disabled={loadingUserLogin}
+            disabled={loadingUserLogin || loadingGoogleLogin}
           >
-            {loadingUserLogin ? (
+            {loadingUserLogin || loadingGoogleLogin ? (
               <div className="spinner-border text-light" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
@@ -109,11 +122,26 @@ function Login() {
               "Login"
             )}
           </button>
+          <div className="text-center mt-2 fw-light">Or</div>
+          {/* //SSO login methods */}
+          <div className="d-flex mt-2 justify-content-around">
+            {/* google login */}
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSucesss}
+              onError={() => console.log("failed")}
+            />
+            {/* facebook login */}
+          </div>
         </div>
 
+        <Divider
+          sx={{ marginBlock: "1rem", backgroundColor: "gray" }}
+        ></Divider>
         {/* alt navigation */}
-        <div className="mt-2 text-center">
-          <Link to="/forgotpassword" className="text-decoration-none">Forget password</Link>
+        <div className="text-center">
+          <Link to="/forgotpassword" className="text-decoration-none">
+            Forget password
+          </Link>
           <div>
             Don't have an Account?{" "}
             <Link to="/register" className="text-decoration-none">

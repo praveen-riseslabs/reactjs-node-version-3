@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   getUserDetails,
+  googleLogin,
   loginUser,
   registerUser,
   requestForgotPassword,
@@ -54,8 +55,14 @@ const userSlice = createSlice({
         ? (state.emailSent = true)
         : (state.emailSent = false);
     });
+
+    // case: login through google SSO
+    builder.addCase(googleLogin.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loggedIn = true;
+    });
   },
 });
 
 export const userReducer = userSlice.reducer;
-export const {logoutUser} = userSlice.actions
+export const { logoutUser } = userSlice.actions;

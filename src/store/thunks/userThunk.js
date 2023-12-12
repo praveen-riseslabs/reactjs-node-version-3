@@ -22,6 +22,17 @@ const loginUser = createAsyncThunk("user/login", async (data) => {
   }
 });
 
+//google login
+const googleLogin = createAsyncThunk("google/login", async (data) => {
+  try {
+    const user = await userApi.post("/user/auth/google", data);
+
+    return user.data;
+  } catch (err) {
+    throw Error(err.response.data.error);
+  }
+});
+
 //get user details
 const getUserDetails = createAsyncThunk("user/details", async (userId) => {
   try {
@@ -49,9 +60,9 @@ const requestForgotPassword = createAsyncThunk(
   "user/requestResetPassword",
   async (email) => {
     try {
-     const data =  await userApi.post("/user/forgotpassword", { email });
+      const data = await userApi.post("/user/forgotpassword", { email });
 
-     return data.data
+      return data.data;
     } catch (err) {
       throw Error(err.response.data.error);
     }
@@ -59,16 +70,21 @@ const requestForgotPassword = createAsyncThunk(
 );
 
 //reset password
-const resetPassword = createAsyncThunk(
-  "user/resetPassword",
-  async (data) => {
-    try {
-      const {userId, newPassword} = data;
-      await userApi.put("/user/resetpassword", { userId, newPassword });
-    } catch (err) {
-      throw Error(err.response.data.error);
-    }
+const resetPassword = createAsyncThunk("user/resetPassword", async (data) => {
+  try {
+    const { userId, newPassword } = data;
+    await userApi.put("/user/resetpassword", { userId, newPassword });
+  } catch (err) {
+    throw Error(err.response.data.error);
   }
-);
+});
 
-export { registerUser, loginUser, getUserDetails, verifyUser, requestForgotPassword, resetPassword };
+export {
+  registerUser,
+  loginUser,
+  getUserDetails,
+  verifyUser,
+  requestForgotPassword,
+  resetPassword,
+  googleLogin,
+};
