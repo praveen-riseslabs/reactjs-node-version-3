@@ -36,7 +36,7 @@ function FileList({ files }) {
                 <span>{date}</span>
               </span>
               <span className="d-flex justify-content-center align-items-center gap-3">
-                <a href={file.fileUrl} download target="_blank" rel="noreferrer">
+                <a href={file.fileUrl} download={filename} target="_blank" rel="noreferrer">
                   <IconButton
                     sx={{ color: "#009dff", width: "2rem", height: "2rem" }}
                   >

@@ -3,9 +3,10 @@ import bcrypt from "bcrypt";
 import { mailTransporter, sendMail } from "../utils/mailTransporter.js";
 import { mailConfig } from "../utils/credentials.js";
 import crypto from "crypto";
+import { OAuth2Client } from "google-auth-library";
 
 class UserController {
-  //user registration post controller
+  //user registration...........................................................................
   static async registerUser(req, res) {
     try {
       const { username, fullname, email, phoneNumber, gender, password } =
@@ -109,7 +110,7 @@ class UserController {
     }
   }
 
-  //login user
+  //login user...................................................................................
   static async loginUser(req, res) {
     try {
       const { usernameOrEmail, password } = req.body;
@@ -145,7 +146,7 @@ class UserController {
     }
   }
 
-  //getting user details
+  //getting user details.........................................................................
   static async getUserDetails(req, res) {
     try {
       const { userId } = req.params;
@@ -170,7 +171,7 @@ class UserController {
     }
   }
 
-  //verify email address
+  //verify email address...........................................................................
   static async verifyEmail(req, res) {
     try {
       const { emailToken } = req.body;
@@ -198,7 +199,7 @@ class UserController {
     }
   }
 
-  //reseting user password
+  //reseting user password......................................................................
   static async resetPassword(req, res) {
     try {
       const { userId, newPassword } = req.body;
@@ -224,7 +225,7 @@ class UserController {
     }
   }
 
-  //sending password reset link
+  //sending password reset link...................................................................
   static async forgotPassword(req, res) {
     try {
       const { email } = req.body;
@@ -235,10 +236,9 @@ class UserController {
 
       const user = await userModel.findOne({ email });
 
-      if(!user){
+      if (!user) {
         throw new Error("Please enter a valid email address");
       }
-
 
       //mail options (what to whom)
       const mailOptions = {
@@ -287,6 +287,54 @@ class UserController {
       res.status(200).json({
         status: 200,
         msg: "success",
+      });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  //google login.................................................................................
+  static async googleLogin(req, res) {
+    try {
+      const { token, clientId } = req.body;
+
+      //verifying the client
+      const client = new OAuth2Client(clientId);
+
+      // Call the verifyIdToken to varify and decode it
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: clientId,
+      });
+      // extracting the user details
+      const payload = ticket.getPayload();
+
+      const { name, given_name, family_name, email, email_verified, sub } =
+        payload;
+
+      const user = await userModel.findOne({ $or: [{ googleId: sub, email }] });
+
+      const fullname = `${given_name} ${family_name}`;
+
+      if (!user) {
+        //creating new user
+        const newUser = new userModel({
+          username: name,
+          fullname,
+          phoneNumber: "not given",
+          email,
+          password: "G",
+          isVerified: email_verified,
+          googleId: sub,
+        });
+        await newUser.save();
+      }
+
+      res.status(201).json({
+        username: name,
+        fullname,
+        email: email,
+        userId: user._id,
       });
     } catch (err) {
       res.status(400).json({ error: err.message });

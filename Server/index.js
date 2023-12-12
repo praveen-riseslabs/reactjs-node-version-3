@@ -11,8 +11,10 @@ const app = express();
 const port = process.env.PORT;
 
 //middlewares
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: process.env.CLIENT_URL}));
 app.use(express.json());
+
+//route middlewares
 app.use("/user", userRoutes);
 app.use("/file", fileRoutes);
 

@@ -26,3 +26,4 @@ node_modules
 .env
 /src/pages/DashBoard.old.js
 .gitignore
+auth.json

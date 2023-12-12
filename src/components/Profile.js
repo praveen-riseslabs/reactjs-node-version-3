@@ -19,12 +19,12 @@ function Profile() {
             )}
           </div>
           <span className="">{user.fullname}</span>
-          <span className="">{user.gender}</span>
         </div>
         <div className="bg-dark p-2 col-3 rounded d-flex flex-column gap-2">
           <span className="pb-2 border-bottom fs-5">Contact Info</span>
           <span className="">Email : {user.email}</span>
           <span className="">Number : {user.phoneNumber}</span>
+          <span className="">gender: {user.gender}</span>
         </div>
       </div>
     </div>
