@@ -312,7 +312,7 @@ class UserController {
       const { name, given_name, family_name, email, email_verified, sub } =
         payload;
 
-      const user = await userModel.findOne({ $or: [{ googleId: sub, email }] });
+      const user = await userModel.findOne({ email });
 
       const fullname = `${given_name} ${family_name}`;
 
@@ -330,10 +330,49 @@ class UserController {
         await newUser.save();
       }
 
-      res.status(201).json({
+      if (!user.googleId) {
+        await userModel.findByIdAndUpdate(user._id, {googleId: sub });
+      }
+
+      res.status(200).json({
         username: name,
         fullname,
         email: email,
+        userId: user._id,
+      });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  //facebook login.................................................................................
+  static async facebookLogin(req, res) {
+    try {
+      const { email, username, fullname, facebookId } = req.body;
+
+      const user = await userModel.findOne({ email });
+
+      if (!user) {
+        //creating new user
+        const newUser = new userModel({
+          username,
+          fullname,
+          phoneNumber: "not given",
+          email,
+          password: "F",
+          facebookId,
+        });
+        await newUser.save();
+      }
+
+      if (!user.facebookId) {
+        await userModel.findByIdAndUpdate(user._id, { facebookId });
+      }
+
+      res.status(200).json({
+        username,
+        fullname,
+        email,
         userId: user._id,
       });
     } catch (err) {

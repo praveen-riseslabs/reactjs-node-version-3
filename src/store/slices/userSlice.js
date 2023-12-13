@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  facebookLogin,
   getUserDetails,
   googleLogin,
   loginUser,
@@ -13,6 +14,7 @@ const userSlice = createSlice({
   initialState: {
     user: {},
     loggedIn: false,
+    socialLogin:false,
     isVerified: false,
     emailSent: false,
   },
@@ -60,6 +62,14 @@ const userSlice = createSlice({
     builder.addCase(googleLogin.fulfilled, (state, action) => {
       state.user = action.payload;
       state.loggedIn = true;
+      state.socialLogin = true
+    });
+    
+    // case: login through facebook SSO
+    builder.addCase(facebookLogin.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loggedIn = true;
+      state.socialLogin = true
     });
   },
 });

@@ -10,6 +10,9 @@ router.post("/login", UserController.loginUser);
 //google login routes
 router.post("/auth/google", UserController.googleLogin)
 
+//facebook login routes
+router.post("/auth/facebook", UserController.facebookLogin)
+
 //getting user details route
 router.get("/:userId", UserController.getUserDetails);
 

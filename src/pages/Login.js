@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useThunk } from "../hooks/useThunk";
-import { googleLogin, loginUser } from "../store";
+import { facebookLogin, googleLogin, loginUser } from "../store";
 import { useSelector } from "react-redux";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { Divider } from "@mui/material";
+import { LoginSocialFacebook } from "reactjs-social-login";
+import { FacebookLoginButton } from "react-social-login-buttons";
+import { Facebook, Google } from "../services/sso";
 
 function Login() {
   const [userData, setUserData] = useState({
@@ -14,6 +17,7 @@ function Login() {
 
   const [doUserLogin, loadingUserLogin, errorLoginUser] = useThunk(loginUser);
   const [doGoogleLogin, loadingGoogleLogin] = useThunk(googleLogin);
+  const [doFacebookLogin, loadingFacebookLogin] = useThunk(facebookLogin);
 
   const navigate = useNavigate();
 
@@ -41,13 +45,24 @@ function Login() {
     doGoogleLogin(userData);
   };
 
+  //handle google login successful
+  const handleFacebookLoginSuccess = ({ provider, data }) => {
+    const userData = {
+      email: data.email,
+      username: data.name,
+      fullname: `${data.first_name} ${data.last_name}`,
+      facebookId: data.userID,
+    };
+    doFacebookLogin(userData);
+  };
+
   // navigating to dashboard after successful login
   useEffect(() => {
     if (!loggedIn) return;
 
     navigate("/", { replace: true });
   }, [navigate, loggedIn]);
-
+  
   return (
     <div
       className="container-fluid"
@@ -112,9 +127,11 @@ function Login() {
             style={{
               background: "linear-gradient(to right, #009dff, #8a2be2)",
             }}
-            disabled={loadingUserLogin || loadingGoogleLogin}
+            disabled={
+              loadingUserLogin || loadingGoogleLogin || loadingFacebookLogin
+            }
           >
-            {loadingUserLogin || loadingGoogleLogin ? (
+            {loadingUserLogin || loadingGoogleLogin || loadingFacebookLogin ? (
               <div className="spinner-border text-light" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
@@ -124,13 +141,28 @@ function Login() {
           </button>
           <div className="text-center mt-2 fw-light">Or</div>
           {/* //SSO login methods */}
-          <div className="d-flex mt-2 justify-content-around">
+          <div className="d-flex mt-2 justify-content-around align-items-center">
             {/* google login */}
-            <GoogleLogin
-              onSuccess={handleGoogleLoginSucesss}
-              onError={() => console.log("failed")}
-            />
+            <GoogleOAuthProvider clientId={Google.CLIENT_ID}>
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSucesss}
+                onError={() => console.log("failed")}
+                text="Continue with google"
+              />
+            </GoogleOAuthProvider>
+
             {/* facebook login */}
+            <LoginSocialFacebook
+              appId={Facebook.APP_ID}
+              onResolve={handleFacebookLoginSuccess}
+              onReject={(err) => console.log("facebook login error", err)}
+            >
+              <FacebookLoginButton
+                size="2.5rem"
+                style={{ width: "12rem", fontSize: "0.8rem" }}
+                text="Continue with facebook"
+              />
+            </LoginSocialFacebook>
           </div>
         </div>
 
