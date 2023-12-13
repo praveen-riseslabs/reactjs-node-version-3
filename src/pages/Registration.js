@@ -1,16 +1,24 @@
 import { useForm } from "react-hook-form";
 import { validate } from "../constants/registrationFormValidation";
 import { useEffect, useState } from "react";
-import { registerUser } from "../store";
+import { facebookLogin, googleLogin, registerUser } from "../store";
 import { useThunk } from "../hooks/useThunk";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Divider } from "@mui/material";
+import { LoginSocialFacebook } from "reactjs-social-login";
+import { Facebook, Google } from "../services/sso";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { FacebookLoginButton } from "react-social-login-buttons";
 
 function Registration() {
   const [gender, setGender] = useState("male");
+  const navigate = useNavigate();
+
   const [doRegisterUser, loadingUserRegister, errorUserRegister] =
     useThunk(registerUser);
-  const navigate = useNavigate();
+  const [doGoogleLogin, loadingGoogleLogin] = useThunk(googleLogin);
+  const [doFacebookLogin, loadingFacebookLogin] = useThunk(facebookLogin);
 
   const {
     reset,
@@ -20,7 +28,7 @@ function Registration() {
   } = useForm({ mode: "all" });
 
   //extracting user state from store
-  const {user} = useSelector(state=> state.user)
+  const { user, socialLogin } = useSelector((state) => state.user);
 
   //handling gender select change
   const handleGenderChange = (e) => {
@@ -59,21 +67,47 @@ function Registration() {
   const onSubmit = async (data, e) => {
     e.preventDefault();
 
-    const userData = {...data, gender}
+    const userData = { ...data, gender };
     await doRegisterUser(userData);
 
-    if(isSubmitSuccessful){
-      reset()
+    if (isSubmitSuccessful) {
+      reset();
     }
   };
 
-  //navigating after user successfully registered 
+  //handle google login successful
+  const handleGoogleLoginSucesss = (res) => {
+    //sending jwt token from google
+    const userData = {
+      token: res.credential,
+      clientId: res.clientId,
+    };
+    doGoogleLogin(userData);
+  };
+
+  //handle google login successful
+  const handleFacebookLoginSuccess = ({ provider, data }) => {
+    const userData = {
+      email: data.email,
+      username: data.name,
+      fullname: `${data.first_name} ${data.last_name}`,
+      facebookId: data.userID,
+    };
+    doFacebookLogin(userData);
+  };
+
+  //navigating after user successfully registered
   useEffect(() => {
     if (Object.keys(user).length === 0) return;
 
+    if (Object.keys(user).length && socialLogin) {
+      navigate("/", { replace: true });
+      return;
+    }
+
     navigate("/login", { replace: true });
-  }, [navigate, user]);
-  
+  }, [navigate, user, socialLogin]);
+
   return (
     <div
       className="container-fluid"
@@ -223,9 +257,13 @@ function Registration() {
             style={{
               background: "linear-gradient(to right, #009dff, #8a2be2)",
             }}
-            disabled={loadingUserRegister}
+            disabled={
+              loadingUserRegister || loadingFacebookLogin || loadingGoogleLogin
+            }
           >
-            {loadingUserRegister ? (
+            {loadingUserRegister ||
+            loadingFacebookLogin ||
+            loadingGoogleLogin ? (
               <div className="spinner-border text-light" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
@@ -233,6 +271,45 @@ function Registration() {
               "Register"
             )}
           </button>
+
+        <div className="text-center mt-2 fw-light">Or</div>
+          {/* //SSO login methods */}
+          <div className="d-flex mt-2 justify-content-around align-items-center">
+            {/* google login */}
+            <GoogleOAuthProvider clientId={Google.CLIENT_ID}>
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSucesss}
+                onError={() => console.log("failed")}
+                text="Continue with google"
+              />
+            </GoogleOAuthProvider>
+
+            {/* facebook login */}
+            <LoginSocialFacebook
+              appId={Facebook.APP_ID}
+              onResolve={handleFacebookLoginSuccess}
+              onReject={(err) => console.log("facebook login error", err)}
+            >
+              <FacebookLoginButton
+                size="2.5rem"
+                style={{ width: "12rem", fontSize: "0.8rem" }}
+                text="Continue with facebook"
+              />
+            </LoginSocialFacebook>
+          </div>
+        </div>
+
+        <Divider
+          sx={{ marginBlock: "1rem", backgroundColor: "gray" }}
+        ></Divider>
+        {/* alt navigation */}
+        <div className="text-center">
+          <div>
+            Already have an Account?{" "}
+            <Link to="/login" className="text-decoration-none">
+              Login
+            </Link>
+          </div>
         </div>
       </form>
     </div>

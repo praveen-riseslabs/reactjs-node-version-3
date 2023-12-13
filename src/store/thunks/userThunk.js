@@ -33,6 +33,17 @@ const googleLogin = createAsyncThunk("google/login", async (data) => {
   }
 });
 
+//google login
+const facebookLogin = createAsyncThunk("facebook/login", async (data) => {
+  try {
+    const user = await userApi.post("/user/auth/facebook", data);
+
+    return user.data;
+  } catch (err) {
+    throw Error(err.response.data.error);
+  }
+});
+
 //get user details
 const getUserDetails = createAsyncThunk("user/details", async (userId) => {
   try {
@@ -87,4 +98,5 @@ export {
   requestForgotPassword,
   resetPassword,
   googleLogin,
+  facebookLogin
 };
