@@ -155,7 +155,7 @@ function Login() {
             <LoginSocialFacebook
               appId={Facebook.APP_ID}
               onResolve={handleFacebookLoginSuccess}
-              onReject={(err) => console.log("facebook login error", err)}
+              onReject={(err) => err}
             >
               <FacebookLoginButton
                 size="2.5rem"

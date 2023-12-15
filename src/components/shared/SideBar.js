@@ -2,6 +2,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { NavLink } from "react-router-dom";
 import { Dashboard } from "@mui/icons-material";
+import ChatIcon from '@mui/icons-material/Chat';
 
 function SideBar() {
   // side bar tabs
@@ -9,6 +10,7 @@ function SideBar() {
     { label: "Dashboard", to: "/", icon: <Dashboard /> },
     { label: "Friends", to: "/friends", icon: <PeopleIcon /> },
     { label: "Teams", to: "/teams", icon: <GroupsIcon /> },
+    { label: "Chats", to: "/chats", icon: <ChatIcon /> },
   ];
 
   const linkStyle = ({ isActive }) => {
