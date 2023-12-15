@@ -10,6 +10,7 @@ import Friends from "./components/shared/Friends";
 import Teams from "./components/shared/Teams";
 import Profile from "./components/Profile";
 import Home from "./pages/Home";
+import Chats from "./components/shared/Chats";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="friends" element={<Friends />} />
         <Route path="teams" element={<Teams />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="chats" element={<Chats />} />
       </Route>
       <Route path="/register" element={<Registration />} />
       <Route path="/login" element={<Login />} />

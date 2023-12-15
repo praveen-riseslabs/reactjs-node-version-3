@@ -1,11 +1,11 @@
 # fullstack-reactjs6
 
+Development setup steps:
 
-Development setup steps 
-      ---client-side---
-      1. after cloning the the repo, in the terminal run "npm install"
-      2. create a ".env" file, and add following keys with the neccesary value:
-            ---Miscellaneous environment variables---
+---client-side--- 
+      1. after cloning the the repo, in the terminal run "npm install" 2. create a ".env" file, and inside of .env file add the following keys with the neccesary value:
+
+            ---Miscellaneous environment variables--- 
             * REACT_APP_SERVER_BASE_API (server side url this is the base url for e.g. "http://localhost:4000)
 
             ---SSO auth---
@@ -14,15 +14,19 @@ Development setup steps
 
       3. to run the app use "npm run start" command.
 
-      --- server-side ---
+--- server-side ---     
       1.cd into Server folder, in the terminal run "npm install"
       2.create a ".env" file, and add following keys with the neccesary value:
-            
+
             ---Miscellaneous environment variables ---
             * PORT (server port to run on e.g. 4000, 5000)
             * CLIENT_URL (base url for client side (string))
             * SALT_VALUE (salt value for bcrypt password hashing e.g. "5", "10")
-            
+
+            ---Miscellaneous environment variables ---
+            * JWT_SECRET (secret string for JWT (string))
+            * JWT_EXPIRY_TIME (JWT expriy time (string | number) Eg: 60, "2 days", "10h", "7d". A numeric value is interpreted as a seconds count.)
+
             --- mongoDb environment variables ---
             * MONGO_URI (mongoDb connection string)
             * DB_NAME (mongoDb db name)
@@ -43,4 +47,3 @@ Development setup steps
             * SIGNED_URL_EXPIRATION_VALUE = (expriry value in seconds for get signed url)
 
       3. to run the app use "npm run start" command
-

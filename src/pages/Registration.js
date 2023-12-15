@@ -10,6 +10,7 @@ import { LoginSocialFacebook } from "reactjs-social-login";
 import { Facebook, Google } from "../services/sso";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { FacebookLoginButton } from "react-social-login-buttons";
+import { genders } from "../constants/gender";
 
 function Registration() {
   const [gender, setGender] = useState("male");
@@ -25,7 +26,11 @@ function Registration() {
     register,
     formState: { errors, isSubmitSuccessful },
     handleSubmit,
+    getValues,
   } = useForm({ mode: "all" });
+
+  const { confirmPassword, password } = getValues();
+  const passwordNotMatch = password !== confirmPassword;
 
   //extracting user state from store
   const { user, socialLogin } = useSelector((state) => state.user);
@@ -34,13 +39,6 @@ function Registration() {
   const handleGenderChange = (e) => {
     setGender(e.target.value);
   };
-
-  //gender object
-  const genders = [
-    { value: "male", label: "Male" },
-    { value: "female", label: "Female" },
-    { value: "preferNotToSay", label: "Prefer not to say" },
-  ];
 
   //mapping over gender radio button object
   const genderOptions = genders.map((gen) => {
@@ -66,6 +64,7 @@ function Registration() {
   //handle submitting the registration form
   const onSubmit = async (data, e) => {
     e.preventDefault();
+    if (passwordNotMatch) return;
 
     const userData = { ...data, gender };
     await doRegisterUser(userData);
@@ -272,7 +271,7 @@ function Registration() {
             )}
           </button>
 
-        <div className="text-center mt-2 fw-light">Or</div>
+          <div className="text-center mt-2 fw-light">Or</div>
           {/* //SSO login methods */}
           <div className="d-flex mt-2 justify-content-around align-items-center">
             {/* google login */}

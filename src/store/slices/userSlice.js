@@ -6,6 +6,7 @@ import {
   loginUser,
   registerUser,
   requestForgotPassword,
+  updateUserInfo,
   verifyUser,
 } from "../thunks/userThunk";
 
@@ -14,16 +15,17 @@ const userSlice = createSlice({
   initialState: {
     user: {},
     loggedIn: false,
-    socialLogin:false,
+    socialLogin: false,
     isVerified: false,
     emailSent: false,
+    userUpdated: false,
   },
   reducers: {
     //user logout
     logoutUser(state, action) {
       state.user = {};
       state.loggedIn = false;
-      state.emailSent = false;
+      localStorage.removeItem('user');
     },
   },
   extraReducers(builder) {
@@ -62,14 +64,21 @@ const userSlice = createSlice({
     builder.addCase(googleLogin.fulfilled, (state, action) => {
       state.user = action.payload;
       state.loggedIn = true;
-      state.socialLogin = true
+      state.socialLogin = true;
     });
-    
+
     // case: login through facebook SSO
     builder.addCase(facebookLogin.fulfilled, (state, action) => {
       state.user = action.payload;
       state.loggedIn = true;
-      state.socialLogin = true
+      state.socialLogin = true;
+    });
+
+    // case: update user info
+    builder.addCase(updateUserInfo.fulfilled, (state, action) => {
+      if (action.payload.status === "success") {
+        state.userUpdated = true;
+      }
     });
   },
 });

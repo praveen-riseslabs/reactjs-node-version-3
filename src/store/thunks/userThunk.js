@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { userApi } from "../api/user";
+import { authApi, userApi } from "../api/user";
 
 //registering new user
 const registerUser = createAsyncThunk("user/register", async (data) => {
@@ -14,7 +14,7 @@ const registerUser = createAsyncThunk("user/register", async (data) => {
 //login user
 const loginUser = createAsyncThunk("user/login", async (data) => {
   try {
-    const user = await userApi.post("/user/login", data);
+    const user = await authApi.post("/user/login", data);
 
     return user.data;
   } catch (err) {
@@ -25,7 +25,7 @@ const loginUser = createAsyncThunk("user/login", async (data) => {
 //google login
 const googleLogin = createAsyncThunk("google/login", async (data) => {
   try {
-    const user = await userApi.post("/user/auth/google", data);
+    const user = await authApi.post("/user/auth/google", data);
 
     return user.data;
   } catch (err) {
@@ -33,10 +33,10 @@ const googleLogin = createAsyncThunk("google/login", async (data) => {
   }
 });
 
-//google login
+//facebook login
 const facebookLogin = createAsyncThunk("facebook/login", async (data) => {
   try {
-    const user = await userApi.post("/user/auth/facebook", data);
+    const user = await authApi.post("/user/auth/facebook", data);
 
     return user.data;
   } catch (err) {
@@ -90,6 +90,17 @@ const resetPassword = createAsyncThunk("user/resetPassword", async (data) => {
   }
 });
 
+//update user details
+const updateUserInfo = createAsyncThunk("user/update", async (data) => {
+  try {
+    const res = await userApi.put("/user/update", data);
+
+    return res.data;
+  } catch (err) {
+    throw Error(err.response.data.error);
+  }
+});
+
 export {
   registerUser,
   loginUser,
@@ -98,5 +109,6 @@ export {
   requestForgotPassword,
   resetPassword,
   googleLogin,
-  facebookLogin
+  facebookLogin,
+  updateUserInfo,
 };

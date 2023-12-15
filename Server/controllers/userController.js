@@ -4,6 +4,7 @@ import { mailTransporter, sendMail } from "../utils/mailTransporter.js";
 import { mailConfig } from "../utils/credentials.js";
 import crypto from "crypto";
 import { OAuth2Client } from "google-auth-library";
+import { createJwtToken } from "../utils/createJwtToken.js";
 
 class UserController {
   //user registration...........................................................................
@@ -95,7 +96,7 @@ class UserController {
       </div>
         `, // html body
       };
-
+      //sending mail
       sendMail(mailTransporter, mailOptions);
 
       res.status(201).json({
@@ -140,6 +141,7 @@ class UserController {
         phoneNumber: user.phoneNumber,
         gender: user.gender,
         userId: user._id,
+        token: createJwtToken(user._id),
       });
     } catch (err) {
       res.status(400).json({ error: err.message });
@@ -331,7 +333,7 @@ class UserController {
       }
 
       if (!user.googleId) {
-        await userModel.findByIdAndUpdate(user._id, {googleId: sub });
+        await userModel.findByIdAndUpdate(user._id, { googleId: sub });
       }
 
       res.status(200).json({
@@ -339,6 +341,7 @@ class UserController {
         fullname,
         email: email,
         userId: user._id,
+        token: createJwtToken(user._id),
       });
     } catch (err) {
       res.status(400).json({ error: err.message });
@@ -374,7 +377,66 @@ class UserController {
         fullname,
         email,
         userId: user._id,
+        token: createJwtToken(user._id),
       });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  //Edit user info....................................................................................
+  static async editUserInfo(req, res) {
+    try {
+      const { password, username, fullname, gender, phoneNumber, userId } =
+        req.body;
+
+      const user = await userModel.findById(userId);
+
+      if (!user) {
+        throw new Error("Invalid user");
+      }
+
+      const verifyPass = await bcrypt.compare(password, user.password);
+
+      if (!verifyPass) {
+        throw new Error("something's wrong");
+      }
+
+      await userModel.findByIdAndUpdate(userId, {
+        fullname,
+        gender,
+        username,
+        phoneNumber,
+      });
+
+      res.status(200).json({ status: "success" });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  //load user friends...................................................................................
+  static async searchForUsers(req, res) {
+    try {
+      const { search } = req.query;
+      if (!search) {
+        throw new Error("search query is missing");
+      }
+
+      const users = await userModel
+        .find(
+          {
+            $or: [
+              { fullname: { $regex: search, $options: "i" } },
+              { username: { $regex: search, $options: "i" } },
+              { email: { $regex: search, $options: "i" } },
+            ],
+          },
+          { password: 0, facebookId: 0, googleId: 0, emailToken: 0 }
+        )
+        .find({ _id: { $ne: req.user._id } });
+
+      res.status(200).json(users);
     } catch (err) {
       res.status(400).json({ error: err.message });
     }

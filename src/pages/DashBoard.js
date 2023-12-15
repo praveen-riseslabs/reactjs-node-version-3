@@ -43,10 +43,11 @@ function DashBoard() {
           />
           <button
             className="btn btn-outline-secondary"
+            style={{width:"10rem"}}
             type="submit"
             disabled={loadingFileUpload || !file}
           >
-            {loadingFileUpload ? <CircularProgress /> : "Upload"}
+            {loadingFileUpload ? <CircularProgress size={18} /> : "Upload"}
           </button>
         </div>
       </form>
