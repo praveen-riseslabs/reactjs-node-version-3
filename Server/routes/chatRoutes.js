@@ -13,6 +13,9 @@ router.post("/create/single", ChatController.createOnetoOneChat);
 //creating group chat
 router.post("/create/group", ChatController.createGroupChat);
 
+//delete group
+router.delete("/delete/group", ChatController.deleteGroup);
+
 //renaming group chat
 router.put("/group/rename", ChatController.renameChatGroup);
 
@@ -22,9 +25,9 @@ router.put("/group/add", ChatController.addUserToGroup);
 //remove user from group
 router.put("/group/remove", ChatController.removeUserFromGroup);
 
+
 //loading all chats
 router.get("/", ChatController.fetchChats);
-
 
 //messages routes.....................................................................................
 //loading chat contents
@@ -32,6 +35,5 @@ router.get("/:chatId", MessageController.loadChatContents);
 
 //send message
 router.post("/message/send", MessageController.sendMessage);
-
 
 export default router;

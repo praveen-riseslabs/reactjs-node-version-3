@@ -31,12 +31,67 @@ const createChat = createAsyncThunk("chat/single", async (userId) => {
   }
 });
 
+//create group chats
+const createGroupChat = createAsyncThunk("chat/group", async (data) => {
+  try {
+    const newGroupChat = await chatApi.post("/create/group", data);
+    return newGroupChat.data;
+  } catch (err) {
+    throw Error(err.response.data.error);
+  }
+});
+
 //fetch all chats/users
 const fetchChats = createAsyncThunk("fetch/chats", async () => {
   try {
     const chats = await chatApi.get("/");
     return chats.data;
   } catch (err) {
+    throw Error(err.response.data.error);
+  }
+});
+
+//rename group
+const renameGroupChat = createAsyncThunk("rename/group", async (data) => {
+  try {
+    const chats = await chatApi.put("/group/rename", data);
+    return chats.data;
+  } catch (err) {
+    throw Error(err.response.data.error);
+  }
+});
+
+//add user to group
+const addUserToGroupChat = createAsyncThunk("addUser/group", async (data) => {
+  try {
+    const chats = await chatApi.put("/group/add", data);
+    return chats.data;
+  } catch (err) {
+    throw Error(err.response.data.error);
+  }
+});
+
+//remove user from group
+const removeUserFromGroupChat = createAsyncThunk(
+  "removeUser/group",
+  async (data) => {
+    try {
+      const chats = await chatApi.put("/group/remove", data);
+      return chats.data;
+    } catch (err) {
+      throw Error(err.response.data.error);
+    }
+  }
+);
+
+//delete group
+const deleteGroup = createAsyncThunk("chat/remove", async (data) => {
+  try {
+    const { chatId, adminId } = data;
+    const chats = await chatApi.delete("/delete/group", { chatId, adminId });
+    return chats.data;
+  } catch (err) {
+    console.log(err);
     throw Error(err.response.data.error);
   }
 });
@@ -61,4 +116,15 @@ const sendMessage = createAsyncThunk("send/message", async (data) => {
   }
 });
 
-export { searchForUser, createChat, fetchChats, fetchMessages, sendMessage };
+export {
+  searchForUser,
+  createChat,
+  createGroupChat,
+  fetchChats,
+  fetchMessages,
+  sendMessage,
+  renameGroupChat,
+  addUserToGroupChat,
+  removeUserFromGroupChat,
+  deleteGroup,
+};

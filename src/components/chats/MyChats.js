@@ -1,18 +1,28 @@
 import { Avatar, LinearProgress, Stack } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useThunk } from "../../hooks/useThunk";
-import { fetchChats } from "../../store";
+import { fetchChats, setActiveChat } from "../../store";
 import { useEffect } from "react";
+import NewGroupChat from "../modals/NewGroupChat";
 
-function MyChats({ onSelect, selectedChatId, getChatNane }) {
+function MyChats({ selectedChat, getChatNane }) {
   const { chats } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
-
+  const dispatch = useDispatch();
   const [doFetchChats, loadingChats, errorLoadingChats] = useThunk(fetchChats);
-  
   //handle click on chat
   const handleChatClick = (chat) => {
-    onSelect(chat);
+    dispatch(setActiveChat(chat));
+  };
+
+  //get sender username of latest message
+  const getSenderName = (senderId, users) => {
+    if (!senderId) return;
+
+    const { username } = users.find(
+      (user) => user._id === senderId && user.username
+    );
+    return username;
   };
 
   //fetching all chats on component load
@@ -26,7 +36,10 @@ function MyChats({ onSelect, selectedChatId, getChatNane }) {
 
   return (
     <div className="bg-dark p-2 rounded h-100 overflow-auto scroll-none">
-      <h4 className="border-bottom pb-2">MyChats</h4>
+      <div className="border-bottom d-flex justify-content-between align-items-center">
+        <h4>MyChats</h4>
+        <NewGroupChat />
+      </div>
       {loadingChats ? (
         <LinearProgress sx={{ bgcolor: "#8a2be2" }} />
       ) : (
@@ -37,7 +50,7 @@ function MyChats({ onSelect, selectedChatId, getChatNane }) {
                 key={chat._id}
                 className="border p-2 rounded d-flex gap-2 align-items-center overflow-hidden"
                 style={
-                  selectedChatId === chat._id
+                  selectedChat._id === chat._id
                     ? {
                         backgroundColor: "#8a2be2",
                         opacity: "0.5",
@@ -55,11 +68,14 @@ function MyChats({ onSelect, selectedChatId, getChatNane }) {
                       ? chat.chatName
                       : getChatNane(user, chat.users)}
                   </span>
-                  <span className="d-flex" style={{ height: "1.5rem" }}>
+                  <span
+                    className="d-flex gap-2"
+                    style={{ height: "1.8rem", overflow: "hidden" }}
+                  >
                     <p className="fw-bold" style={{ color: "#009dff" }}>
-                      sender:
+                      {getSenderName(chat.latestMessage?.sender, chat.users)} -
                     </p>
-                    <p>{chat.latestMessage.message}</p>
+                    <p>{chat.latestMessage?.message}</p>
                   </span>
                 </div>
               </div>

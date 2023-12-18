@@ -153,6 +153,24 @@ class ChatController {
     }
   }
 
+  //delete group.........................................................................
+  static async deleteGroup(req, res) {
+    try {
+      const { chatId, adminId } = req.body;
+      console.log(chatId, adminId, req.user._id);
+
+      if (adminId !== req.user._id.toString()) {
+        throw new Error("you're not an admin of this group");
+      }
+
+      const deletedGroup = await chatModel.findByIdAndDelete(chatId);
+
+      res.status(200).json(deletedGroup);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
   //loading all chats/user chats.......................................................................
   static async fetchChats(req, res) {
     try {
