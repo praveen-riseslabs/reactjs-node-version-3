@@ -6,8 +6,8 @@ import http from "http";
 import { connectDb } from "./connectDb.js";
 import userRoutes from "./routes/userRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
-import chatRoutes from "./routes/chatRoutes.js"
-import { chatModel } from "./models/chatModel.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import { chatConfig } from "./socketRoutes/chatConfig.js";
 
 //configuration
 dotenv.config();
@@ -32,31 +32,10 @@ app.use("/*", (req, res) => {
 connectDb(process.env.MONGO_URI, process.env.DB_NAME);
 
 //socket io connection
-
-const users = new Map();
-
-//socket nameSpace connection
+//socket nameSpace connection for chats
 const chat = io.of("/chat");
+chat.on("connection", chatConfig);
 
-chat.on("connection", async (socket) => {
-  console.log("socket connection established...");
-
-  //changing user online status : true
-  // socket.handshake.auth.userId &&
-  //   (await chatModel.findByIdAndUpdate(
-  //     socket.handshake.auth.userId,
-  //     { isOnline: true },
-  //     { upsert: true }
-  //   ));
-
-  socket.on("disconnect", async () => {
-    console.log("socket disconnected...");
-    //changing user online status : false
-    // await chatModel.findByIdAndUpdate(socket.handshake.auth.userId, {
-    //   isOnline: false,
-    // });
-  });
-});
 
 //starting the server
 server.listen(port, () => {

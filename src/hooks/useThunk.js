@@ -6,6 +6,12 @@ function useThunk(thunk) {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
+  //emptying the error & stop loading immediately
+  const reset = () => {
+    setLoading(false);
+    setError(null);
+  };
+
   const runThunk = useCallback(
     async (arg) => {
       try {
@@ -20,7 +26,7 @@ function useThunk(thunk) {
     [thunk, dispatch]
   );
 
-  return [runThunk, loading, error];
+  return [runThunk, loading, error, reset];
 }
 
 export { useThunk };

@@ -10,7 +10,7 @@ function Home() {
           className="col-2 bg-dark text-white p-0"
           style={{ height: "100vh" }}
         >
-          <div className="px-4 py-3 align-items-center fw-bold">Windmill</div>
+          <div className="px-4 py-3 align-items-center fw-bold">RisesLabs</div>
           <div className="">
             <SideBar />
           </div>
