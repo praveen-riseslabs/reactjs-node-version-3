@@ -8,12 +8,14 @@ import {
   notify,
   setActiveChat,
 } from "./slices/chatSlice";
+import { assetReducer } from "./slices/assetSlice";
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     file: fileReducer,
     chat: chatReducer,
+    asset: assetReducer,
   },
 });
 
@@ -29,3 +31,4 @@ export {
 export * from "./thunks/userThunk";
 export * from "./thunks/fileThunk";
 export * from "./thunks/chatThunk";
+export * from "./thunks/assetThunk";

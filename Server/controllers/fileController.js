@@ -22,6 +22,8 @@ const s3 = new S3Client({
   region: bucketRegion,
 });
 
+const folder = "miscellaneous";
+
 class FileController {
   //uploading a file
   static async uploadFile(req, res) {
@@ -30,7 +32,7 @@ class FileController {
       //put/post object to params
       const params = {
         Bucket: bucketName,
-        Key: filename,
+        Key: `${folder}/${filename}`,
         Body: req.file.buffer,
         ContentType: req.file.mimetype,
       };
@@ -44,7 +46,7 @@ class FileController {
       //get object parma
       const getParams = {
         Bucket: bucketName,
-        Key: newFile.filename,
+        Key: `${folder}/${newFile.filename}`,
       };
 
       const getCommand = new GetObjectCommand(getParams);
@@ -68,7 +70,7 @@ class FileController {
           //get object params
           const params = {
             Bucket: bucketName,
-            Key: file.filename,
+            Key: `${folder}/${file.filename}`,
           };
 
           const command = new GetObjectCommand(params);
@@ -100,7 +102,7 @@ class FileController {
       //delete object params
       const params = {
         Bucket: bucketName,
-        Key: file.filename,
+        Key: `${folder}/${file.filename}`,
       };
       const command = new DeleteObjectCommand(params);
       await s3.send(command);
