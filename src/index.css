@@ -8,3 +8,8 @@
 .scroll-none::-webkit-scrollbar {
   width: 0;
 }
+
+.hover:hover {
+  scale: 1.05;
+  filter: contrast(1.5);
+}

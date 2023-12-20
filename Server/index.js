@@ -7,6 +7,7 @@ import { connectDb } from "./connectDb.js";
 import userRoutes from "./routes/userRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import assetRoutes from "./routes/assetRoutes.js";
 import { chatConfig } from "./socketRoutes/chatConfig.js";
 
 //configuration
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/file", fileRoutes);
 app.use("/chat", chatRoutes);
+app.use("/asset", assetRoutes);
 app.use("/*", (req, res) => {
   res.status(404).json({ message: "Not Found" });
 });
@@ -35,7 +37,6 @@ connectDb(process.env.MONGO_URI, process.env.DB_NAME);
 //socket nameSpace connection for chats
 const chat = io.of("/chat");
 chat.on("connection", chatConfig);
-
 
 //starting the server
 server.listen(port, () => {
