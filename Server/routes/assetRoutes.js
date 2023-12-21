@@ -12,4 +12,16 @@ router.post("/create", upload.array("files"), AssetController.createNewAsset);
 //get all assets
 router.get("/", AssetController.getAllAssets);
 
+//deleting asset permanently
+router.delete("/delete/:assetId", AssetController.deletePermanently);
+
+//set asset to trash state
+router.put("/trash/:assetId", AssetController.trashAsset);
+
+//restring asset from trash state
+router.put("/restore/:assetId", AssetController.restoreAsset);
+
+//update asset
+router.put("/update", AssetController.updateAsset);
+
 export default router;
