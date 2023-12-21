@@ -1,4 +1,4 @@
-import { Button, Chip, IconButton, LinearProgress, Modal } from "@mui/material";
+import { Button, Chip, IconButton, Modal } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useRef, useState } from "react";
@@ -6,6 +6,7 @@ import { assetCategory } from "../../constants/assetsCategory";
 import { createNewAsset } from "../../store";
 import { useThunk } from "../../hooks/useThunk";
 import UploadIcon from "@mui/icons-material/Upload";
+import ProgressModal from "./ProgressModal";
 
 function NewAsset({ assets }) {
   const [open, setOpen] = useState(false);
@@ -81,7 +82,7 @@ function NewAsset({ assets }) {
       setSelectedFiles([]);
       setDescription("");
     }
-    
+
     return () => (previousAssetsLength.current = assets.length);
   }, [assets.length]);
 
@@ -160,6 +161,7 @@ function NewAsset({ assets }) {
                 />
                 <select
                   className="pt-2 form-select shadow-none bg-dark text-white"
+                  value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
                   {categories}
@@ -247,16 +249,7 @@ function NewAsset({ assets }) {
         </div>
       </Modal>
 
-      {/* progress modal */}
-      <Modal open={loadingCreateNewAsset}>
-        <div
-          className="position-absolute top-50 start-50 translate-middle bg-dark rounded p-2"
-          style={{ width: "20rem" }}
-        >
-          <p className="text-light">Creating...</p>
-          <LinearProgress sx={{ bgcolor: "#8a2be2" }} />
-        </div>
-      </Modal>
+      <ProgressModal loadingEl={loadingCreateNewAsset} text={"Creating..."} />
     </>
   );
 }

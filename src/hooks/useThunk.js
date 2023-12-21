@@ -4,12 +4,19 @@ import { useDispatch } from "react-redux";
 function useThunk(thunk) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isRan, setIsRan] = useState(false);
   const dispatch = useDispatch();
 
   //emptying the error & stop loading immediately
   const reset = () => {
     setLoading(false);
     setError(null);
+    setIsRan(false);
+  };
+
+  //reseting the is ran state
+  const resetIsRan = () => {
+    setIsRan(false);
   };
 
   const runThunk = useCallback(
@@ -17,8 +24,10 @@ function useThunk(thunk) {
       try {
         setLoading(true);
         await dispatch(thunk(arg)).unwrap();
+        setIsRan(true);
       } catch (err) {
         setError(err.message);
+        setIsRan(false);
       } finally {
         setLoading(false);
       }
@@ -26,7 +35,7 @@ function useThunk(thunk) {
     [thunk, dispatch]
   );
 
-  return [runThunk, loading, error, reset];
+  return [runThunk, loading, error, isRan, reset, resetIsRan];
 }
 
 export { useThunk };

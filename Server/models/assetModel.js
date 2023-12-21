@@ -24,6 +24,10 @@ const assetSchema = new mongoose.Schema(
         type: String,
       },
     ],
+    trashed: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
