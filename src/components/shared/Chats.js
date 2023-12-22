@@ -4,12 +4,16 @@ import { useSelector } from "react-redux";
 import MyChats from "../chats/MyChats";
 import ChatBox from "../chats/ChatBox";
 import SideDrawer from "../chats/SideDrawer";
+import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 
 const baseUrl = process.env.REACT_APP_SERVER_BASE_API;
 
 function Chats() {
   const { user } = useSelector((state) => state.user);
   const { activeChat } = useSelector((state) => state.chat);
+
+  const { glWidth } = useWindowDimensions();
+  const isMobile = glWidth <= 768;
 
   //setting up chat socket
   const chatSocket = useMemo(
@@ -44,22 +48,22 @@ function Chats() {
     };
   }, [chatSocket]);
 
-  
   return (
-    <div className="container" style={{ height: "45rem" }}>
+    <div className="container-fluid" style={{ height: "45rem" }}>
       <div className="row">
         <SideDrawer />
       </div>
       <div className="row py-2" style={{ height: "43rem" }}>
-        <div className="col-4 h-100">
-          <MyChats selectedChat={activeChat} getChatNane={getChatNane} />
+        <div className="col-4 h-100 p-1 p-md-2">
+          <MyChats selectedChat={activeChat} getChatNane={getChatNane} isMobile={isMobile} />
         </div>
-        <div className="col-8 h-100">
+        <div className="col-8 h-100 p-1 p-md-2">
           <ChatBox
             activeChat={activeChat && activeChat}
             user={user}
             getChatNane={getChatNane}
             chatSocket={chatSocket}
+            isMobile={isMobile}
           />
         </div>
       </div>

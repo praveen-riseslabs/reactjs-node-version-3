@@ -116,8 +116,7 @@ function Registration() {
       }}
     >
       <form
-        className="position-absolute top-50 start-50 translate-middle border p-4 rounded bg-light"
-        style={{ width: "40rem" }}
+        className="position-absolute top-50 start-50 translate-middle border p-2 p-md-4 rounded bg-light"
         onSubmit={handleSubmit(onSubmit)}
       >
         <h1>
@@ -133,7 +132,7 @@ function Registration() {
         </h1>
         <div className="row g-md-4">
           {/* fullname */}
-          <div className="col-md-6 mb-3">
+          <div className="col-md-6 mb-md-3">
             <label htmlFor="fullName" className="form-label">
               Full Name
             </label>
@@ -150,7 +149,7 @@ function Registration() {
           </div>
 
           {/* Username */}
-          <div className="col-md-6 mb-3">
+          <div className="col-md-6 mb-md-3">
             <label htmlFor="username" className="form-label">
               Username
             </label>
@@ -168,7 +167,7 @@ function Registration() {
         </div>
         <div className="row g-md-4">
           {/* Email */}
-          <div className="col-md-6 mb-3">
+          <div className="col-md-6 mb-md-3">
             <label htmlFor="email" className="form-label">
               Email
             </label>
@@ -184,7 +183,7 @@ function Registration() {
             <div className="invalid-feedback">{errors.email?.message}</div>
           </div>
           {/* phone number */}
-          <div className="col-md-6 mb-3">
+          <div className="col-md-6 mb-md-3">
             <label htmlFor="phoneNumber" className="form-label">
               Phone Number
             </label>
@@ -204,7 +203,7 @@ function Registration() {
         </div>
         <div className="row g-md-4">
           {/* password */}
-          <div className="col-md-6 mb-3">
+          <div className="col-md-6 mb-md-3">
             <label htmlFor="password" className="form-label">
               Password
             </label>
@@ -220,7 +219,7 @@ function Registration() {
             <div className="invalid-feedback">{errors.password?.message}</div>
           </div>
           {/* confirm Password */}
-          <div className="col-md-6 mb-3">
+          <div className="col-md-6 mb-md-3">
             <label htmlFor="confirmPassword" className="form-label">
               Confirm Password
             </label>
@@ -240,7 +239,7 @@ function Registration() {
         </div>
 
         {/* gender section */}
-        <h2 className="mt-3">Gender</h2>
+        <h2 className="mt-md-3">Gender</h2>
         <div className="d-flex gap-4">{genderOptions}</div>
 
         {/* server side error handling */}
@@ -273,32 +272,40 @@ function Registration() {
 
           <div className="text-center mt-2 fw-light">Or</div>
           {/* //SSO login methods */}
-          <div className="d-flex mt-2 justify-content-around align-items-center">
-            {/* google login */}
-            <GoogleOAuthProvider clientId={Google.CLIENT_ID}>
-              <GoogleLogin
-                onSuccess={handleGoogleLoginSucesss}
-                onError={() => console.log("failed")}
-                text="Continue with google"
-              />
-            </GoogleOAuthProvider>
+          <div className="container">
+            <div className="row d-flex justify-content-around align-items-center">
+              {/* google login */}
+              <div className="col">
+                <GoogleOAuthProvider clientId={Google.CLIENT_ID}>
+                  <GoogleLogin
+                    onSuccess={handleGoogleLoginSucesss}
+                    onError={() => console.log("failed")}
+                    text="Continue with google"
+                  />
+                </GoogleOAuthProvider>
+              </div>
 
-            {/* facebook login */}
-            <LoginSocialFacebook
-              appId={Facebook.APP_ID}
-              onResolve={handleFacebookLoginSuccess}
-              onReject={(err) => console.log("facebook login error", err)}
-            >
-              <FacebookLoginButton
-                size="2.5rem"
-                style={{ width: "12rem", fontSize: "0.8rem" }}
-                text="Continue with facebook"
-              />
-            </LoginSocialFacebook>
+              {/* facebook login */}
+              <div className="col">
+                <LoginSocialFacebook
+                  appId={Facebook.APP_ID}
+                  onResolve={handleFacebookLoginSuccess}
+                  onReject={(err) => console.log("facebook login error", err)}
+                  className="mt-md-0 mt-2"
+                >
+                  <FacebookLoginButton
+                    size="2.5rem"
+                    style={{ fontSize: "0.8rem" }}
+                    text="Continue with facebook"
+                  />
+                </LoginSocialFacebook>
+              </div>
+            </div>
           </div>
         </div>
 
         <Divider
+          className="d-none d-md-block"
           sx={{ marginBlock: "1rem", backgroundColor: "gray" }}
         ></Divider>
         {/* alt navigation */}

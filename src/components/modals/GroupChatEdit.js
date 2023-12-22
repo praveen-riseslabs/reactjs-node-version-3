@@ -23,7 +23,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { green } from "@mui/material/colors";
 import SettingsIcon from "@mui/icons-material/Settings";
 
-function GroupChatEdit({ activeChat }) {
+function GroupChatEdit({ activeChat, isMobile }) {
   const { filteredUser } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
 
@@ -79,7 +79,6 @@ function GroupChatEdit({ activeChat }) {
       adminId: activeChat.groupAdmin._id,
     });
   };
-
 
   //handle create group
   const handleSaveChanges = (e) => {
@@ -137,7 +136,7 @@ function GroupChatEdit({ activeChat }) {
         <div
           className="position-absolute top-50 start-50 translate-middle bg-dark
         rounded p-2 text-light"
-          style={{ width: "30%" }}
+          style={{ width: isMobile ? "50%" : "30%" }}
         >
           {/* header */}
           <div className="d-flex justify-content-between align-items-center pb-2">
@@ -178,7 +177,7 @@ function GroupChatEdit({ activeChat }) {
                 ),
               }}
             />
-            <div className="mt-2 d-flex gap-2">
+            <div className="mt-2 d-flex flex-wrap gap-2">
               {selectedUsers.map((user) => {
                 return (
                   <Chip
@@ -207,7 +206,7 @@ function GroupChatEdit({ activeChat }) {
               }
               variant="contained"
               color="error"
-              sx={{width:"10rem", alignSelf:"end"}}
+              sx={{ width: "10rem", alignSelf: "end" }}
             >
               delete group
             </Button>
