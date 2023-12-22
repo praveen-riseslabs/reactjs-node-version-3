@@ -37,7 +37,7 @@ function MyChats({ selectedChat, getChatNane, isMobile }) {
   return (
     <div className="bg-dark p-2 rounded h-100 overflow-auto scroll-none">
       <div className="border-bottom d-flex justify-content-between align-items-center">
-        <h4>MyChats</h4>
+        {isMobile ? <h6>MyChats</h6> : <h4>MyChats</h4>}
         <NewGroupChat isMobile={isMobile} />
       </div>
       {loadingChats ? (

@@ -8,17 +8,37 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 function SideBar({ isMobile }) {
   // side bar tabs
   const sidebarLinks = [
-    { label: "Dashboard", to: "/", icon: <Dashboard /> },
-    { label: "Friends", to: "/friends", icon: <PeopleIcon /> },
-    { label: "Teams", to: "/teams", icon: <GroupsIcon /> },
-    { label: "Chats", to: "/chats", icon: <ChatIcon /> },
-    { label: "MyAssets", to: "/assets", icon: <InventoryIcon /> },
+    {
+      label: "Dashboard",
+      to: "/",
+      icon: <Dashboard sx={{ color: "#403374" }} />,
+    },
+    {
+      label: "Friends",
+      to: "/friends",
+      icon: <PeopleIcon sx={{ color: "#A46134" }} />,
+    },
+    {
+      label: "Teams",
+      to: "/teams",
+      icon: <GroupsIcon sx={{ color: "#D93D46" }} />,
+    },
+    {
+      label: "Chats",
+      to: "/chats",
+      icon: <ChatIcon sx={{ color: "#058CE1" }} />,
+    },
+    {
+      label: "MyAssets",
+      to: "/assets",
+      icon: <InventoryIcon sx={{ color: "#229F53" }} />,
+    },
   ];
 
   const linkStyle = ({ isActive }) => {
     if (isActive) {
       return {
-        borderLeft: isMobile? "2px solid #8a2be2" : "4px solid #8a2be2",
+        borderLeft: isMobile ? "2px solid #8a2be2" : "4px solid #8a2be2",
         textDecoration: "none",
         color: "white",
       };
