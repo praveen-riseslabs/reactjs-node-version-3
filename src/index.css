@@ -9,6 +9,18 @@
   width: 0;
 }
 
+.scroll-1::-webkit-scrollbar {
+  width: 0.2rem;
+}
+
+.scroll-1::-webkit-scrollbar-thumb{
+  background-color: white;
+}
+
+.scroll-none::-webkit-scrollbar {
+  width: 0;
+}
+
 .hover:hover {
   scale: 1.05;
   filter: contrast(1.5);

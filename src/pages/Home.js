@@ -23,7 +23,7 @@ function Home() {
           <Header />
           {/* main section */}
           <div className="text-white">
-            <Outlet />
+            <Outlet context={isMobile}/>
           </div>
         </div>
       </div>

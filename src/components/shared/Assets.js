@@ -21,6 +21,7 @@ import ProgressModal from "../modals/ProgressModal";
 import ErrorSnackBar from "../modals/ErrorSnackBar";
 import ConfirmationDialog from "../modals/ConfirmationDialog";
 import EditAsset from "../modals/EditAsset";
+import { useOutletContext } from "react-router-dom";
 
 function Assets() {
   const [doFetchAssets, loadingAssets, errorLoadingAssets] =
@@ -56,6 +57,7 @@ function Assets() {
   const [searchBy, setSearchBy] = useState("name");
   const [selectedRowId, setSelectedRowId] = useState("");
   const [tableState, setTableState] = useState(true);
+  const isMobile = useOutletContext();
 
   const regex = new RegExp(deferredSearch, "i");
 
@@ -110,25 +112,25 @@ function Assets() {
     {
       field: "name",
       headerName: "Name",
-      width: 150,
+      width: isMobile ? 100 : 150,
       headerAlign: "center",
       align: "center",
       editable: true,
       hideable: false,
       disableColumnMenu: true,
-      cellClassName: "text-white",
+      cellClassName: "text-white text-wrap",
       headerClassName: "fw-bold fs-6 text-secondary",
     },
     {
       field: "type",
       headerName: "Type",
-      width: 150,
+      width: isMobile ? 100 : 150,
       headerAlign: "center",
       align: "center",
       editable: true,
       hideable: false,
       disableColumnMenu: true,
-      cellClassName: "text-white",
+      cellClassName: "text-white text-wrap",
       headerClassName: "fw-bold fs-6 text-secondary",
     },
     {
@@ -137,31 +139,32 @@ function Assets() {
       editable: true,
       headerAlign: "center",
       align: "center",
-      width: 150,
+      width: isMobile ? 100 : 150,
       sortable: false,
       disableColumnMenu: true,
-      cellClassName: "d-flex position-relative text-white",
+      cellClassName:
+        "d-flex position-relative text-white text-wrap overflow-auto scroll-1",
       headerClassName: "user-select-none fw-bold fs-6 text-secondary",
     },
     {
       field: "createdAt",
       headerName: "Uploaded At (date-time)",
-      width: 200,
+      width: isMobile ? 100 : 200,
       editable: true,
       hideable: false,
       disableColumnMenu: false,
       headerAlign: "center",
       align: "center",
-      cellClassName: "text-white",
+      cellClassName: "text-white text-wrap",
       headerClassName: "fw-bold fs-6 text-secondary",
     },
     {
       field: "files",
       headerName: "Files",
-      width: 200,
+      width: isMobile ? 100 : 200,
       headerAlign: "center",
       align: "center",
-      cellClassName: "d-flex flex-wrap overflow-auto",
+      cellClassName: "d-flex flex-wrap overflow-auto scroll-1",
       headerClassName: "user-select-none fw-bold fs-6 text-secondary",
       disableColumnMenu: true,
       sortable: false,
@@ -195,7 +198,7 @@ function Assets() {
     {
       field: "",
       headerName: "Edit",
-      width: 150,
+      width: isMobile ? 50 : 150,
       headerAlign: "center",
       align: "center",
       headerClassName: "user-select-none fw-bold fs-6 text-secondary fs-6",
@@ -209,7 +212,7 @@ function Assets() {
         return (
           <div className="d-flex flex-column align-items-center">
             {tableState ? (
-              <div>
+              <div className="d-flex flex-column">
                 <IconButton
                   title="send to trash"
                   onClick={() => {
@@ -224,22 +227,33 @@ function Assets() {
                     <DeleteIcon className="text-danger hover" />
                   )}
                 </IconButton>
-                <EditAsset items={params}/>
+                <EditAsset items={params} isMobile={isMobile} />
               </div>
             ) : (
               <div className="d-flex gap-1 flex-column align-items-center flex-column">
-                <Button
-                  size="small"
-                  startIcon={<RestoreIcon />}
-                  title="restore record to previous state"
-                  variant="contained"
-                  onClick={() => {
-                    setSelectedRowId(id);
-                    handleRestoreRecord(id);
-                  }}
-                >
-                  Restore
-                </Button>
+                {isMobile ? (
+                  <IconButton
+                    onClick={() => {
+                      setSelectedRowId(id);
+                      handleRestoreRecord(id);
+                    }}
+                  >
+                    <RestoreIcon sx={{ color: "#009dff" }} />
+                  </IconButton>
+                ) : (
+                  <Button
+                    size="small"
+                    startIcon={<RestoreIcon />}
+                    title="restore record to previous state"
+                    variant="contained"
+                    onClick={() => {
+                      setSelectedRowId(id);
+                      handleRestoreRecord(id);
+                    }}
+                  >
+                    Restore
+                  </Button>
+                )}
                 <ConfirmationDialog
                   open={openDeleteConfirm}
                   onDisagree={handleConfirmationDeleteClose}
@@ -266,23 +280,34 @@ function Assets() {
                     </>
                   }
                 >
-                  <Button
-                    size="small"
-                    startIcon={<DeleteForeverIcon />}
-                    title="delete this record permanently"
-                    variant="outlined"
-                    color="error"
-                    onClick={() => {
-                      setSelectedRowId(id);
-                      handleConfirmationDeleteOpen();
-                    }}
-                  >
-                    Delete
-                  </Button>
+                  {isMobile ? (
+                    <IconButton
+                      onClick={() => {
+                        setSelectedRowId(id);
+                        handleConfirmationDeleteOpen();
+                      }}
+                    >
+                      <DeleteForeverIcon color="error" />
+                    </IconButton>
+                  ) : (
+                    <Button
+                      size="small"
+                      startIcon={<DeleteForeverIcon />}
+                      title="delete this record permanently"
+                      variant="outlined"
+                      color="error"
+                      onClick={() => {
+                        setSelectedRowId(id);
+                        handleConfirmationDeleteOpen();
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  )}
                 </ConfirmationDialog>
               </div>
             )}
-            {errorTrashingAsset && (
+            {errorTrashingAsset && !isMobile && (
               <span className="text-danger">{errorTrashingAsset}</span>
             )}
           </div>
@@ -335,7 +360,7 @@ function Assets() {
         style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}
       >
         <h3 className="py-2 fw-bold">My Assets</h3>
-        <NewAsset assets={assets} />
+        <NewAsset assets={assets} isMobile={isMobile} />
       </div>
       <div
         className="d-flex flex-column jusitfy-content-between"
@@ -374,13 +399,15 @@ function Assets() {
             <div className="input-group-text bg-dark border-0">
               <input
                 className="form-control shadow-none"
-                style={{ width: "20rem" }}
+                style={{ width: "20rem", minWidth: "10rem" }}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="search by specific field"
               />
             </div>
-            <div className="align-self-center fw-bold">search by</div>
+            {!isMobile && (
+              <div className="align-self-center fw-bold">search by</div>
+            )}
             <select
               className="form-select border-0 shadow-none bg-dark"
               value={searchBy}
@@ -405,7 +432,7 @@ function Assets() {
             <Table columns={columns} rows={rows} />
           )
         ) : !trashedAssets.length ? (
-          <h3 className="position-absolute top-50 start-50 translate-middle text-secondary ">
+          <h3 className="position-absolute top-50 fs-4 fs-md-3 start-50 translate-middle text-secondary ">
             No Trashed Assets Here
           </h3>
         ) : loadingTrashAssets ? (

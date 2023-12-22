@@ -5,7 +5,11 @@ import { DataGrid } from "@mui/x-data-grid";
 function Table({ columns, rows }) {
   return (
     <TableContainer
-      sx={{ bgcolor: "black", height: "35rem" }}
+      sx={{
+        bgcolor: "black",
+        height: "35rem",
+        position: "relative",
+      }}
       className="scroll-none"
     >
       <DataGrid
@@ -24,8 +28,13 @@ function Table({ columns, rows }) {
             },
           },
         }}
-        classes={{ sortIcon: "text-white", menuIcon:"bg-secondary rounded",virtualScroller:"scroll-none", footerContainer:"bg-secondary" }}
-        style={{ border: "none" }}
+        classes={{
+          sortIcon: "text-white",
+          menuIcon: "bg-secondary rounded",
+          footerContainer: "bg-secondary",
+          // virtualScroller: "scroll-none",
+        }}
+        style={{ border: "none", position: "absolute", overflow:"hidden" }}
         pageSizeOptions={[5, 10, 20]}
         disableRowSelectionOnClick
         disableColumnSelector

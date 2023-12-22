@@ -140,7 +140,7 @@ function Login() {
           </button>
           <div className="text-center mt-2 fw-light">Or</div>
           {/* //SSO login methods */}
-          <div className="d-md-flex mt-2 justify-content-around align-items-center">
+          <div className="d-flex mt-2 flex-column flex-md-row justify-content-around align-items-center">
             {/* google login */}
             <GoogleOAuthProvider clientId={Google.CLIENT_ID}>
               <GoogleLogin
@@ -155,7 +155,7 @@ function Login() {
               appId={Facebook.APP_ID}
               onResolve={handleFacebookLoginSuccess}
               onReject={(err) => err}
-              className="mt-sm-2 mt-md-0"
+              className="mt-md-0 mt-2"
             >
               <FacebookLoginButton
                 size="2.5rem"
