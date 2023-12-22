@@ -62,7 +62,7 @@ function Login() {
 
     navigate("/", { replace: true });
   }, [navigate, loggedIn]);
-  
+
   return (
     <div
       className="container-fluid"
@@ -72,8 +72,7 @@ function Login() {
       }}
     >
       <form
-        className="position-absolute top-50 start-50 translate-middle border p-4 rounded bg-light"
-        style={{ width: "40rem" }}
+        className={`position-absolute top-50 start-50 translate-middle border p-4 rounded bg-light`}
         onSubmit={handleSubmit}
       >
         <h1>
@@ -141,7 +140,7 @@ function Login() {
           </button>
           <div className="text-center mt-2 fw-light">Or</div>
           {/* //SSO login methods */}
-          <div className="d-flex mt-2 justify-content-around align-items-center">
+          <div className="d-md-flex mt-2 justify-content-around align-items-center">
             {/* google login */}
             <GoogleOAuthProvider clientId={Google.CLIENT_ID}>
               <GoogleLogin
@@ -156,6 +155,7 @@ function Login() {
               appId={Facebook.APP_ID}
               onResolve={handleFacebookLoginSuccess}
               onReject={(err) => err}
+              className="mt-sm-2 mt-md-0"
             >
               <FacebookLoginButton
                 size="2.5rem"

@@ -17,7 +17,7 @@ import { useThunk } from "../../hooks/useThunk";
 import SearchIcon from "@mui/icons-material/Search";
 import { green } from "@mui/material/colors";
 
-function NewGroupChat() {
+function NewGroupChat({isMobile}) {
   const [open, setOpen] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -106,19 +106,19 @@ function NewGroupChat() {
   return (
     <>
       <span
-        className="rounded px-2 text-light d-flex align-items-center justify-content-between"
+        className="rounded px-2 text-light d-flex flex-sm-column align-items-center justify-content-between"
         style={{ backgroundColor: "#8080801a" }}
         role="button"
         onClick={handleOpen}
       >
-        New group Chat
+        <span className="d-none d-md-inline">New group Chat</span>
         <AddIcon />
       </span>
       <Modal open={open} onClose={handleClose}>
         <div
           className="position-absolute top-50 start-50 translate-middle bg-dark
         rounded p-2 text-light"
-          style={{ width: "30%" }}
+          style={{ width: isMobile? "50%" :"30%" }}
         >
           {/* header */}
           <div className="d-flex justify-content-between align-items-center pb-2">
@@ -159,7 +159,7 @@ function NewGroupChat() {
                 ),
               }}
             />
-            <div className="mt-2 d-flex gap-2">
+            <div className="mt-2 d-flex flex-wrap gap-2">
               {selectedUsers.map((user) => {
                 return (
                   <Chip

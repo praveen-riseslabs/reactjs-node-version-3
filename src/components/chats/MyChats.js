@@ -5,7 +5,7 @@ import { fetchChats, setActiveChat } from "../../store";
 import { useEffect } from "react";
 import NewGroupChat from "../modals/NewGroupChat";
 
-function MyChats({ selectedChat, getChatNane }) {
+function MyChats({ selectedChat, getChatNane, isMobile }) {
   const { chats } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -38,17 +38,17 @@ function MyChats({ selectedChat, getChatNane }) {
     <div className="bg-dark p-2 rounded h-100 overflow-auto scroll-none">
       <div className="border-bottom d-flex justify-content-between align-items-center">
         <h4>MyChats</h4>
-        <NewGroupChat />
+        <NewGroupChat isMobile={isMobile} />
       </div>
       {loadingChats ? (
         <LinearProgress sx={{ bgcolor: "#8a2be2" }} />
       ) : (
-        <Stack spacing={2} sx={{ marginBlock: "1rem" }}>
+        <Stack spacing={isMobile ? 1 : 2} sx={{ marginBlock: "1rem" }}>
           {chats.map((chat) => {
             return (
               <div
                 key={chat._id}
-                className="border p-2 rounded d-flex gap-2 align-items-center overflow-hidden"
+                className="border p-md-2 p-sm-1 rounded d-flex gap-2 align-items-center overflow-hidden"
                 style={
                   selectedChat._id === chat._id
                     ? {
@@ -61,7 +61,7 @@ function MyChats({ selectedChat, getChatNane }) {
                 role="button"
                 onClick={() => handleChatClick(chat)}
               >
-                <Avatar sx={{ padding: 0, margin: 0 }} />
+                {!isMobile && <Avatar sx={{ padding: 0, margin: 0 }} />}
                 <div className="d-flex flex-column">
                   <span className="fw-bold">
                     {chat.isGroupChat

@@ -13,7 +13,7 @@ import SendIcon from "@mui/icons-material/Send";
 import moment from "moment";
 import GroupChatEdit from "../modals/GroupChatEdit";
 
-function ChatBox({ activeChat, getChatNane, user, chatSocket }) {
+function ChatBox({ activeChat, getChatNane, user, chatSocket, isMobile }) {
   const [message, setMessage] = useState("");
   const { activeChatMessages } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
@@ -123,7 +123,7 @@ function ChatBox({ activeChat, getChatNane, user, chatSocket }) {
       <div className="bg-dark p-2 rounded h-100 position-relative">
         <h3
           className="position-absolute top-50 start-50 translate-middle"
-          style={{ color: "gray", opacity: "0.5" }}
+          style={{ color: "gray", opacity: "0.5", fontSize:isMobile && "1rem" }}
         >
           No Chat Selected
         </h3>
@@ -139,7 +139,7 @@ function ChatBox({ activeChat, getChatNane, user, chatSocket }) {
             ? activeChat.chatName
             : getChatNane(user, activeChat?.users)}
         </h4>
-        {activeChat.isGroupChat && <GroupChatEdit activeChat={activeChat} />}
+        {activeChat.isGroupChat && <GroupChatEdit activeChat={activeChat} isMobile={isMobile} />}
       </div>
       {loadingMessages ? (
         <LinearProgress sx={{ bgcolor: "#8a2be2" }} />
@@ -171,10 +171,10 @@ function ChatBox({ activeChat, getChatNane, user, chatSocket }) {
               className="btn btn-outline-secondary"
               type="button"
               onClick={handleSend}
-              style={{ width: "8rem" }}
+              style={{ width: !isMobile && "8rem" }}
               disabled={sendingMessage}
             >
-              Send{" "}
+              {!isMobile && "Send "}
               {sendingMessage ? <CircularProgress size={12} /> : <SendIcon />}
             </button>
           </div>
