@@ -8,7 +8,7 @@ import { useThunk } from "../../hooks/useThunk";
 import UploadIcon from "@mui/icons-material/Upload";
 import ProgressModal from "./ProgressModal";
 
-function NewAsset({ assets }) {
+function NewAsset({ assets, isMobile }) {
   const [open, setOpen] = useState(false);
   const [assetName, setAssetName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("None");
@@ -100,24 +100,37 @@ function NewAsset({ assets }) {
 
   return (
     <>
-      <Button
-        variant="contained"
-        style={{ backgroundColor: "#009dff" }}
-        startIcon={<AddBoxIcon />}
-        onClick={handleOpen}
-      >
-        Create New Asset
-      </Button>
+      {isMobile ? (
+        <IconButton onClick={handleOpen}>
+          <AddBoxIcon
+            sx={{
+              color: "white",
+              bgcolor: "#009dff",
+              width: "2rem",
+              borderRadius: "0.5rem",
+            }}
+          />
+        </IconButton>
+      ) : (
+        <Button
+          variant="contained"
+          style={{ backgroundColor: "#009dff" }}
+          startIcon={<AddBoxIcon />}
+          onClick={handleOpen}
+        >
+          Create New Asset
+        </Button>
+      )}
 
       <Modal open={open}>
         <div
           className="position-absolute top-50 start-50 translate-middle bg-dark
         rounded p-2 text-light"
-          style={{ width: "30%" }}
+          style={{ width: isMobile ? "50%" : "30%" }}
         >
           {/* header */}
           <div className="d-flex justify-content-between align-items-center pb-2">
-            <h4>Create New Asset</h4>
+            <h4 className="fs-6 fs-md-4">Create New Asset</h4>
             <IconButton onClick={handleClose} disabled={loadingCreateNewAsset}>
               <CloseIcon sx={{ color: "white" }} />
             </IconButton>

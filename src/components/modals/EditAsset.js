@@ -8,7 +8,7 @@ import { assetCategory } from "../../constants/assetsCategory";
 import CloseIcon from "@mui/icons-material/Close";
 import ErrorSnackBar from "./ErrorSnackBar";
 
-function EditAsset({ items: { row: asset } }) {
+function EditAsset({ items: { row: asset }, isMobile }) {
   const [isOpen, setIsOpen] = useState(false);
   const [assetName, setAssetName] = useState(asset.name);
   const [selectedCategory, setSelectedCategory] = useState(
@@ -81,11 +81,11 @@ function EditAsset({ items: { row: asset } }) {
         <div
           className="position-absolute top-50 start-50 translate-middle bg-dark
         rounded p-2 text-light"
-          style={{ width: "30%" }}
+          style={{ width: isMobile? "50%" :"30%" }}
         >
           {/* header */}
           <div className="d-flex justify-content-between align-items-center pb-2">
-            <h4>Edit Asset</h4>
+            <h4 className="fs-5 fs-md-4">Edit Asset</h4>
             <IconButton onClick={handleClose} disabled={loadingUpdateAsset}>
               <CloseIcon sx={{ color: "white" }} />
             </IconButton>

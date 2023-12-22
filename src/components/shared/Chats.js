@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import MyChats from "../chats/MyChats";
 import ChatBox from "../chats/ChatBox";
 import SideDrawer from "../chats/SideDrawer";
-import { useWindowDimensions } from "../../hooks/useWindowDimensions";
+import { useOutletContext } from "react-router-dom";
 
 const baseUrl = process.env.REACT_APP_SERVER_BASE_API;
 
@@ -12,8 +12,7 @@ function Chats() {
   const { user } = useSelector((state) => state.user);
   const { activeChat } = useSelector((state) => state.chat);
 
-  const { glWidth } = useWindowDimensions();
-  const isMobile = glWidth <= 768;
+  const isMobile = useOutletContext()
 
   //setting up chat socket
   const chatSocket = useMemo(

@@ -276,7 +276,7 @@ function Registration() {
             <div className="row d-flex justify-content-around align-items-center">
               {/* google login */}
               <div className="col">
-                <GoogleOAuthProvider clientId={Google.CLIENT_ID}>
+                <GoogleOAuthProvider  clientId={Google.CLIENT_ID}>
                   <GoogleLogin
                     onSuccess={handleGoogleLoginSucesss}
                     onError={() => console.log("failed")}
