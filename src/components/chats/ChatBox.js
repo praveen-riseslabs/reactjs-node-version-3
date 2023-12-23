@@ -8,12 +8,20 @@ import {
 } from "../../store";
 import { useThunk } from "../../hooks/useThunk";
 import { useEffect, useState } from "react";
-import { CircularProgress, LinearProgress } from "@mui/material";
+import { CircularProgress, IconButton, LinearProgress } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import moment from "moment";
 import GroupChatEdit from "../modals/GroupChatEdit";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
-function ChatBox({ activeChat, getChatNane, user, chatSocket, isMobile }) {
+function ChatBox({
+  activeChat,
+  getChatNane,
+  user,
+  chatSocket,
+  isMobile,
+  setIsChatBoxVisible,
+}) {
   const [message, setMessage] = useState("");
   const { activeChatMessages } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
@@ -123,7 +131,11 @@ function ChatBox({ activeChat, getChatNane, user, chatSocket, isMobile }) {
       <div className="bg-dark p-2 rounded h-100 position-relative">
         <h3
           className="position-absolute top-50 start-50 translate-middle"
-          style={{ color: "gray", opacity: "0.5", fontSize:isMobile && "1rem" }}
+          style={{
+            color: "gray",
+            opacity: "0.5",
+            fontSize: isMobile && "1rem",
+          }}
         >
           No Chat Selected
         </h3>
@@ -134,12 +146,22 @@ function ChatBox({ activeChat, getChatNane, user, chatSocket, isMobile }) {
   return (
     <div className="bg-dark p-2 rounded h-100">
       <div className="border-bottom pb-2 d-flex justify-content-between">
-        <h4>
-          {activeChat.isGroupChat
-            ? activeChat.chatName
-            : getChatNane(user, activeChat?.users)}
-        </h4>
-        {activeChat.isGroupChat && <GroupChatEdit activeChat={activeChat} isMobile={isMobile} />}
+        <div className="d-flex gap-3 align-items-center">
+          <IconButton
+            sx={{ padding: 0, margin: 0 }}
+            onClick={() => setIsChatBoxVisible(false)}
+          >
+            <ArrowCircleLeftIcon fontSize="large" sx={{ color: "white" }} />
+          </IconButton>
+          <h4>
+            {activeChat.isGroupChat
+              ? activeChat.chatName
+              : getChatNane(user, activeChat?.users)}
+          </h4>
+        </div>
+        {activeChat.isGroupChat && (
+          <GroupChatEdit activeChat={activeChat} isMobile={isMobile} />
+        )}
       </div>
       {loadingMessages ? (
         <LinearProgress sx={{ bgcolor: "#8a2be2" }} />

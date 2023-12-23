@@ -4,8 +4,9 @@ import { useThunk } from "../../hooks/useThunk";
 import { fetchChats, setActiveChat } from "../../store";
 import { useEffect } from "react";
 import NewGroupChat from "../modals/NewGroupChat";
+import moment from "moment";
 
-function MyChats({ selectedChat, getChatNane, isMobile }) {
+function MyChats({ selectedChat, getChatNane, isMobile, setIsChatBoxVisible }) {
   const { chats } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ function MyChats({ selectedChat, getChatNane, isMobile }) {
   //handle click on chat
   const handleChatClick = (chat) => {
     dispatch(setActiveChat(chat));
+    setIsChatBoxVisible(true);
   };
 
   //get sender username of latest message
@@ -48,7 +50,7 @@ function MyChats({ selectedChat, getChatNane, isMobile }) {
             return (
               <div
                 key={chat._id}
-                className="border p-md-2 p-sm-1 rounded d-flex gap-2 align-items-center overflow-hidden"
+                className="border p-2 rounded d-flex gap-2 align-items-center overflow-hidden"
                 style={
                   selectedChat._id === chat._id
                     ? {
@@ -62,12 +64,19 @@ function MyChats({ selectedChat, getChatNane, isMobile }) {
                 onClick={() => handleChatClick(chat)}
               >
                 {!isMobile && <Avatar sx={{ padding: 0, margin: 0 }} />}
-                <div className="d-flex flex-column">
-                  <span className="fw-bold">
-                    {chat.isGroupChat
-                      ? chat.chatName
-                      : getChatNane(user, chat.users)}
-                  </span>
+                <div className="d-flex flex-column w-100">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className="fw-bold">
+                      {chat.isGroupChat
+                        ? chat.chatName
+                        : getChatNane(user, chat.users)}
+                    </span>
+                    <span className="d-inline">
+                      {chat.latestMessage
+                        ? moment(chat.latestMessage.createdAt).format("hh:mm A")
+                        : null}
+                    </span>
+                  </div>
                   <span
                     className="d-flex gap-2"
                     style={{ height: "1.8rem", overflow: "hidden" }}

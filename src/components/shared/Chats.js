@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import MyChats from "../chats/MyChats";
@@ -11,8 +11,11 @@ const baseUrl = process.env.REACT_APP_SERVER_BASE_API;
 function Chats() {
   const { user } = useSelector((state) => state.user);
   const { activeChat } = useSelector((state) => state.chat);
+  const [isChatBoxVisible, setIsChatBoxVisible] = useState(false);
+  // const { glWidth } = useWindowDimensions();
+  // const isTab = glWidth <= 768;
 
-  const isMobile = useOutletContext()
+  const isMobile = useOutletContext();
 
   //setting up chat socket
   const chatSocket = useMemo(
@@ -53,18 +56,50 @@ function Chats() {
         <SideDrawer />
       </div>
       <div className="row py-2" style={{ height: "43rem" }}>
-        <div className="col-4 h-100 p-1 p-md-2">
-          <MyChats selectedChat={activeChat} getChatNane={getChatNane} isMobile={isMobile} />
-        </div>
-        <div className="col-8 h-100 p-1 p-md-2">
-          <ChatBox
-            activeChat={activeChat && activeChat}
-            user={user}
-            getChatNane={getChatNane}
-            chatSocket={chatSocket}
-            isMobile={isMobile}
-          />
-        </div>
+        {isMobile ? (
+          !isChatBoxVisible ? (
+            <div className="col-12 h-100 p-1 p-md-2">
+              <MyChats
+                setIsChatBoxVisible={setIsChatBoxVisible}
+                selectedChat={activeChat}
+                getChatNane={getChatNane}
+                isMobile={isMobile}
+              />
+            </div>
+          ) : (
+            <div className="col-12 h-100 p-1 p-md-2">
+              <ChatBox
+                activeChat={activeChat && activeChat}
+                user={user}
+                getChatNane={getChatNane}
+                chatSocket={chatSocket}
+                isMobile={isMobile}
+                setIsChatBoxVisible={setIsChatBoxVisible}
+              />
+            </div>
+          )
+        ) : (
+          <>
+            <div className="col-4 h-100 p-1 p-md-2">
+              <MyChats
+                setIsChatBoxVisible={setIsChatBoxVisible}
+                selectedChat={activeChat}
+                getChatNane={getChatNane}
+                isMobile={isMobile}
+              />
+            </div>
+            <div className="col-8 h-100 p-1 p-md-2">
+              <ChatBox
+                activeChat={activeChat && activeChat}
+                user={user}
+                getChatNane={getChatNane}
+                chatSocket={chatSocket}
+                isMobile={isMobile}
+                setIsChatBoxVisible={setIsChatBoxVisible}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

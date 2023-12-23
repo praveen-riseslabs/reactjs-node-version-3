@@ -22,6 +22,7 @@ import ErrorSnackBar from "../modals/ErrorSnackBar";
 import ConfirmationDialog from "../modals/ConfirmationDialog";
 import EditAsset from "../modals/EditAsset";
 import { useOutletContext } from "react-router-dom";
+import FileGrid from "../modals/FileGrid";
 
 function Assets() {
   const [doFetchAssets, loadingAssets, errorLoadingAssets] =
@@ -112,7 +113,7 @@ function Assets() {
     {
       field: "name",
       headerName: "Name",
-      width: isMobile ? 100 : 150,
+      width: 150,
       headerAlign: "center",
       align: "center",
       editable: true,
@@ -124,7 +125,7 @@ function Assets() {
     {
       field: "type",
       headerName: "Type",
-      width: isMobile ? 100 : 150,
+      width: 150,
       headerAlign: "center",
       align: "center",
       editable: true,
@@ -139,7 +140,7 @@ function Assets() {
       editable: true,
       headerAlign: "center",
       align: "center",
-      width: isMobile ? 100 : 150,
+      width: 150,
       sortable: false,
       disableColumnMenu: true,
       cellClassName:
@@ -149,7 +150,7 @@ function Assets() {
     {
       field: "createdAt",
       headerName: "Uploaded At (date-time)",
-      width: isMobile ? 100 : 200,
+      width: 200,
       editable: true,
       hideable: false,
       disableColumnMenu: false,
@@ -160,8 +161,8 @@ function Assets() {
     },
     {
       field: "files",
-      headerName: "Files",
-      width: isMobile ? 100 : 200,
+      headerName: "View",
+      width: 200,
       headerAlign: "center",
       align: "center",
       cellClassName: "d-flex flex-wrap overflow-auto scroll-1",
@@ -173,32 +174,13 @@ function Assets() {
           row: { files },
         } = params;
 
-        return files.map((file, i) => {
-          const filename = file.filename
-            ?.split("/")[2]
-            ?.split("_")
-            ?.slice(1)
-            .join("");
-          return (
-            <a
-              key={i}
-              href={file.url}
-              target="_blank"
-              rel="noreferrer"
-              className="text-decoration-none hover"
-            >
-              <span style={{ fontSize: "0.6rem" }} role="button">
-                {filename} ,
-              </span>
-            </a>
-          );
-        });
+        return <FileGrid files={files} isMobile={isMobile}/>;
       },
     },
     {
       field: "",
       headerName: "Edit",
-      width: isMobile ? 50 : 150,
+      width: 150,
       headerAlign: "center",
       align: "center",
       headerClassName: "user-select-none fw-bold fs-6 text-secondary fs-6",
@@ -212,7 +194,7 @@ function Assets() {
         return (
           <div className="d-flex flex-column align-items-center">
             {tableState ? (
-              <div className="d-flex flex-column">
+              <div className="d-flex flex-column flex-md-row">
                 <IconButton
                   title="send to trash"
                   onClick={() => {
@@ -352,7 +334,7 @@ function Assets() {
 
   return (
     <div
-      className="px-3 overflow-auto position-relative"
+      className="px-3 overflow-auto position-relative scroll-none"
       style={{ height: "45rem", scrollSnapType: "y mandatory" }}
     >
       <div
