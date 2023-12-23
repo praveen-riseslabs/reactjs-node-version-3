@@ -106,7 +106,7 @@ function NewGroupChat({isMobile}) {
   return (
     <>
       <span
-        className="rounded px-2 text-light d-flex flex-sm-column align-items-center justify-content-between"
+        className="rounded px-2 text-light d-flex align-items-center justify-content-between"
         style={{ backgroundColor: "#8080801a" }}
         role="button"
         onClick={handleOpen}

@@ -116,10 +116,10 @@ function Registration() {
       }}
     >
       <form
-        className="position-absolute top-50 start-50 translate-middle border p-2 p-md-4 rounded bg-light"
+        className="position-absolute top-50 start-50 translate-middle border p-2 p-md-4 rounded bg-dark"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h1>
+        <h1 className="text-white">
           <span
             style={{
               borderBottom: "3px solid",
@@ -130,7 +130,7 @@ function Registration() {
           </span>
           gistration
         </h1>
-        <div className="row g-md-4">
+        <div className="row g-md-4 text-white">
           {/* fullname */}
           <div className="col-md-6 mb-md-3">
             <label htmlFor="fullName" className="form-label">
@@ -165,7 +165,7 @@ function Registration() {
             <div className="invalid-feedback">{errors.username?.message}</div>
           </div>
         </div>
-        <div className="row g-md-4">
+        <div className="row g-md-4 text-white">
           {/* Email */}
           <div className="col-md-6 mb-md-3">
             <label htmlFor="email" className="form-label">
@@ -201,7 +201,7 @@ function Registration() {
             </div>
           </div>
         </div>
-        <div className="row g-md-4">
+        <div className="row g-md-4 text-white">
           {/* password */}
           <div className="col-md-6 mb-md-3">
             <label htmlFor="password" className="form-label">
@@ -239,8 +239,8 @@ function Registration() {
         </div>
 
         {/* gender section */}
-        <h2 className="mt-md-3">Gender</h2>
-        <div className="d-flex gap-4">{genderOptions}</div>
+        <h2 className="mt-md-3 text-white">Gender</h2>
+        <div className="d-flex gap-4 text-white">{genderOptions}</div>
 
         {/* server side error handling */}
         <div className="text-danger">
@@ -270,7 +270,7 @@ function Registration() {
             )}
           </button>
 
-          <div className="text-center mt-2 fw-light">Or</div>
+          <div className="text-center mt-2 fw-light text-white">Or</div>
           {/* //SSO login methods */}
           <div className="container">
             <div className="row d-flex justify-content-around align-items-center">
@@ -309,7 +309,7 @@ function Registration() {
           sx={{ marginBlock: "1rem", backgroundColor: "gray" }}
         ></Divider>
         {/* alt navigation */}
-        <div className="text-center">
+        <div className="text-center text-white">
           <div>
             Already have an Account?{" "}
             <Link to="/login" className="text-decoration-none">

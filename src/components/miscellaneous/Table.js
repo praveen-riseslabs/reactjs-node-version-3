@@ -32,9 +32,9 @@ function Table({ columns, rows }) {
           sortIcon: "text-white",
           menuIcon: "bg-secondary rounded",
           footerContainer: "bg-secondary",
-          // virtualScroller: "scroll-none",
+          // virtualScroller: "srcoll-1",
         }}
-        style={{ border: "none", position: "absolute", overflow:"hidden" }}
+        style={{ border: "none", position: "absolute" }}
         pageSizeOptions={[5, 10, 20]}
         disableRowSelectionOnClick
         disableColumnSelector

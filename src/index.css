@@ -24,4 +24,9 @@
 .hover:hover {
   scale: 1.05;
   filter: contrast(1.5);
+  cursor: pointer;
+}
+
+.low-brightness{
+  filter:brightness(0.4);
 }

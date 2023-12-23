@@ -72,10 +72,10 @@ function Login() {
       }}
     >
       <form
-        className={`position-absolute top-50 start-50 translate-middle border p-4 rounded bg-light`}
+        className={`position-absolute top-50 start-50 translate-middle border p-4 rounded bg-dark`}
         onSubmit={handleSubmit}
       >
-        <h1>
+        <h1 className="text-white">
           <span
             style={{
               borderBottom: "3px solid",
@@ -90,7 +90,7 @@ function Login() {
         {/* user details */}
         <div className="d-flex flex-column gap-3 mt-4">
           <div>
-            <label className="form-label">Username or Email</label>
+            <label className="form-label text-white">Username or Email</label>
             <input
               type="text"
               name="usernameOrEmail"
@@ -101,7 +101,7 @@ function Login() {
             />
           </div>
           <div>
-            <label className="form-label">Password</label>
+            <label className="form-label text-white">Password</label>
             <input
               type="password"
               name="password"
@@ -138,7 +138,7 @@ function Login() {
               "Login"
             )}
           </button>
-          <div className="text-center mt-2 fw-light">Or</div>
+          <div className="text-center mt-2 fw-light text-white">Or</div>
           {/* //SSO login methods */}
           <div className="d-flex mt-2 flex-column flex-md-row justify-content-around align-items-center">
             {/* google login */}
@@ -174,7 +174,7 @@ function Login() {
           <Link to="/forgotpassword" className="text-decoration-none">
             Forget password
           </Link>
-          <div>
+          <div className="text-white">
             Don't have an Account?{" "}
             <Link to="/register" className="text-decoration-none">
               Register
