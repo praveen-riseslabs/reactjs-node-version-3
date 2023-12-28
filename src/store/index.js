@@ -9,6 +9,7 @@ import {
   setActiveChat,
 } from "./slices/chatSlice";
 import { assetReducer } from "./slices/assetSlice";
+import { mapReducer } from "./slices/mapSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     file: fileReducer,
     chat: chatReducer,
     asset: assetReducer,
+    map: mapReducer,
   },
 });
 
@@ -32,3 +34,4 @@ export * from "./thunks/userThunk";
 export * from "./thunks/fileThunk";
 export * from "./thunks/chatThunk";
 export * from "./thunks/assetThunk";
+export * from "./thunks/mapThunk";

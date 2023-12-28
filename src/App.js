@@ -12,6 +12,7 @@ import Profile from "./components/Profile";
 import Home from "./pages/Home";
 import Chats from "./components/shared/Chats";
 import Assets from "./components/shared/Assets";
+import Timeline from "./components/shared/Timeline";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="profile" element={<Profile />} />
         <Route path="chats" element={<Chats />} />
         <Route path="assets" element={<Assets />} />
+        <Route path="timeline" element={<Timeline />} />
       </Route>
       <Route path="/register" element={<Registration />} />
       <Route path="/login" element={<Login />} />

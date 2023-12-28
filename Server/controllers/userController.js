@@ -141,6 +141,7 @@ class UserController {
         phoneNumber: user.phoneNumber,
         gender: user.gender,
         userId: user._id,
+        isTrackingEnabled: user.isTrackingEnabled,
         token: createJwtToken(user._id),
       });
     } catch (err) {
@@ -166,6 +167,7 @@ class UserController {
         phoneNumber: user.phoneNumber,
         gender: user.gender,
         userId: user._id,
+        isTrackingEnabled: user.isTrackingEnabled,
         isVerified: user.isVerified,
       });
     } catch (err) {
@@ -341,6 +343,7 @@ class UserController {
         fullname,
         email: email,
         userId: user._id,
+        isTrackingEnabled: user.isTrackingEnabled,
         token: createJwtToken(user._id),
       });
     } catch (err) {
@@ -377,6 +380,7 @@ class UserController {
         fullname,
         email,
         userId: user._id,
+        isTrackingEnabled: user.isTrackingEnabled,
         token: createJwtToken(user._id),
       });
     } catch (err) {
@@ -437,6 +441,35 @@ class UserController {
         .find({ _id: { $ne: req.user._id } });
 
       res.status(200).json(users);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  //toggle tracking...................................................................................
+  static async toggleTracking(req, res) {
+    try {
+      const { tracking = false } = req.query;
+      
+      const user = await userModel.findByIdAndUpdate(
+        req.user._id,
+        {
+          $set: { isTrackingEnabled: tracking },
+        },
+        { new: true }
+      );
+
+      res
+        .status(200)
+        .json({
+          username: user.username,
+          fullname: user.fullname,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          gender: user.gender,
+          userId: user._id,
+          isTrackingEnabled: user.isTrackingEnabled,
+        });
     } catch (err) {
       res.status(400).json({ error: err.message });
     }

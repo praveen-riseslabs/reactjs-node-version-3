@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Dashboard } from "@mui/icons-material";
 import ChatIcon from "@mui/icons-material/Chat";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import TimelineIcon from "@mui/icons-material/Timeline";
 
 function SideBar({ isMobile }) {
   // side bar tabs
@@ -33,6 +34,11 @@ function SideBar({ isMobile }) {
       to: "/assets",
       icon: <InventoryIcon sx={{ color: "#229F53" }} />,
     },
+    {
+      label: "Timeline",
+      to: "/timeline",
+      icon: <TimelineIcon sx={{ color: "#403374" }} />,
+    },
   ];
 
   const linkStyle = ({ isActive }) => {
@@ -60,7 +66,7 @@ function SideBar({ isMobile }) {
         title={link.label}
       >
         {link.icon}
-        {!isMobile && <label className="px-2">{link.label}</label>}
+        <label className="px-2 d-none d-md-block">{link.label}</label>
       </NavLink>
     );
   });

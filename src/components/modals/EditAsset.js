@@ -23,8 +23,8 @@ function EditAsset({ items: { row: asset }, isMobile }) {
     doUpdateAsset,
     loadingUpdateAsset,
     errorUpdateAsset,
-    isUpdateSuccess,
     resetError,
+    isUpdateSuccess,
     resetIsUpdateSuccess,
   ] = useThunk(updateAsset);
 
@@ -81,7 +81,7 @@ function EditAsset({ items: { row: asset }, isMobile }) {
         <div
           className="position-absolute top-50 start-50 translate-middle bg-dark
         rounded p-2 text-light"
-          style={{ width: isMobile? "50%" :"30%" }}
+          style={{ width: isMobile ? "50%" : "30%" }}
         >
           {/* header */}
           <div className="d-flex justify-content-between align-items-center pb-2">
@@ -209,7 +209,7 @@ function EditAsset({ items: { row: asset }, isMobile }) {
       <ErrorSnackBar
         open={isUpdateSuccess}
         severity="success"
-        note={"Failed to update asset"}
+        note={"Asset Was Successfully Updated"}
         onClose={resetIsUpdateSuccess}
         autoHideDuration={3000}
       />

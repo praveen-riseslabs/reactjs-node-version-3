@@ -129,6 +129,47 @@ class AssetController {
           return { ...asset.toObject(), files: signedFiles };
         })
       );
+
+      // if (trashed) {
+      //   await Promise.all(
+      //     assets.map(async (asset) => {
+      //       if (asset.expiresAt && asset.expiresAt <= Date.now()) {
+      //         await Promise.all(
+      //           assets.files.map(async (file) => {
+      //             //delete object params
+      //             const params = {
+      //               Bucket: bucketName,
+      //               Key: file,
+      //             };
+      //             const command = new DeleteObjectCommand(params);
+      //             await s3.send(command);
+      //           })
+      //         );
+      //       }
+      //     })
+      //   );
+      // }
+
+      // const params = {
+      //   Bucket: 'your-bucket-name',
+      //   LifecycleConfiguration: {
+      //     Rules: [
+      //       {
+      //         ID: 'Rule1',         // Unique identifier for the rule
+      //         Status: 'Enabled',   // Rule is active
+      //         Expiration: { Days: 30 }, // Expire objects after 30 days
+
+      //         // Apply the rule only to objects with the prefix 'logs/'
+      //         Filter: {
+      //           Prefix: 'logs/',
+      //         },
+      //       },
+      //     ],
+      //   },
+      // };
+
+      // s3Client.send(new PutBucketLifecycleConfigurationCommand(params))
+
       res.status(201).json(updatedAssets);
     } catch (err) {
       res.status(400).json({ error: err.message });
@@ -177,7 +218,13 @@ class AssetController {
 
       const updatedAsset = await assetModel.findByIdAndUpdate(
         assetId,
-        { $set: { trashed: true } },
+        {
+          $set: {
+            trashed: true,
+            expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+            // expiresAt: new Date(Date.now() + 15 * 1000),
+          },
+        },
         { new: true }
       );
 
@@ -199,7 +246,7 @@ class AssetController {
 
       const updatedAsset = await assetModel.findByIdAndUpdate(
         assetId,
-        { $set: { trashed: false } },
+        { $set: { trashed: false, expiresAt: null } },
         { new: true }
       );
 

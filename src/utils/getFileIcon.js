@@ -4,7 +4,7 @@ export const getFileIcon = (file) => {
   const filename = file.filename?.split("/")[2]?.split("_")?.slice(1).join("");
 
   const regex = /\.(.+)$/;
-  const type = file.filename.match(regex);
+  const type = file.filename?.match(regex);
   let finalType = type[1];
   const strArr = finalType.split(".");
 

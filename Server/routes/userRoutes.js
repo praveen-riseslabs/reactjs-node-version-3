@@ -26,4 +26,7 @@ router.post("/forgotpassword", UserController.forgotPassword);
 //search for users
 router.get("/search/people", requireAuth, UserController.searchForUsers);
 
+//toggle tracking
+router.put("/tracking/toggle", requireAuth, UserController.toggleTracking);
+
 export default router;

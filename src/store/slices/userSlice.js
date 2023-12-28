@@ -6,6 +6,7 @@ import {
   loginUser,
   registerUser,
   requestForgotPassword,
+  toggleTracking,
   updateUserInfo,
   verifyUser,
 } from "../thunks/userThunk";
@@ -25,7 +26,7 @@ const userSlice = createSlice({
     logoutUser(state, action) {
       state.user = {};
       state.loggedIn = false;
-      localStorage.removeItem('user');
+      localStorage.removeItem("user");
     },
   },
   extraReducers(builder) {
@@ -79,6 +80,11 @@ const userSlice = createSlice({
       if (action.payload.status === "success") {
         state.userUpdated = true;
       }
+    });
+
+    // case: tracking location toggle
+    builder.addCase(toggleTracking.fulfilled, (state, action) => {
+      state.user = action.payload;
     });
   },
 });

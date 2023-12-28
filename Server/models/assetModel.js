@@ -28,9 +28,15 @@ const assetSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    expiresAt: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );
+
+assetSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const assetModel = mongoose.model("asset", assetSchema);
 
