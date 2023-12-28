@@ -8,6 +8,7 @@ import userRoutes from "./routes/userRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import assetRoutes from "./routes/assetRoutes.js";
+import mapRoutes from "./routes/mapRoutes.js";
 import { chatConfig } from "./socketRoutes/chatConfig.js";
 
 //configuration
@@ -26,6 +27,7 @@ app.use("/user", userRoutes);
 app.use("/file", fileRoutes);
 app.use("/chat", chatRoutes);
 app.use("/asset", assetRoutes);
+app.use("/map", mapRoutes);
 app.use("/*", (req, res) => {
   res.status(404).json({ message: "Not Found" });
 });

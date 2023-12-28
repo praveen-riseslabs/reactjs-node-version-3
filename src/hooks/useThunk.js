@@ -35,7 +35,7 @@ function useThunk(thunk) {
     [thunk, dispatch]
   );
 
-  return [runThunk, loading, error, isRan, reset, resetIsRan];
+  return [runThunk, loading, error,reset, isRan, resetIsRan];
 }
 
 export { useThunk };

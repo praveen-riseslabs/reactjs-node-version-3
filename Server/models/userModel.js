@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  isTrackingEnabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const userModel = mongoose.model("user", userSchema);

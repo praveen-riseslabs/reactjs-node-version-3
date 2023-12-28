@@ -12,6 +12,9 @@ Development setup steps:
             * REACT_APP_GOOGLE_CLIENT_ID (google client id (string))
             * REACT_APP_FACEBOOK_APP_ID (facebook app id (string))
 
+            ---Google map---
+            * REACT_APP_GOOGLE_MAP_API_KEY  (google client id (string))
+
       3. to run the app use "npm run start" command.
 
 --- server-side ---     

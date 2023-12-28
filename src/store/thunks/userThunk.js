@@ -101,6 +101,28 @@ const updateUserInfo = createAsyncThunk("user/update", async (data) => {
   }
 });
 
+//toggle location tracking
+const toggleTracking = createAsyncThunk(
+  "user/trackingToggle",
+  async (tracking) => {
+    try {
+      const { token } = JSON.parse(localStorage.getItem("user"));
+      const users = await userApi.put(
+        "/user/tracking/toggle",
+        {},
+        {
+          headers: { Authorization: "Bearer " + token },
+          params: { tracking: tracking },
+        }
+      );
+
+      return users.data;
+    } catch (err) {
+      throw Error(err.response.data.error);
+    }
+  }
+);
+
 export {
   registerUser,
   loginUser,
@@ -111,4 +133,5 @@ export {
   googleLogin,
   facebookLogin,
   updateUserInfo,
+  toggleTracking,
 };
