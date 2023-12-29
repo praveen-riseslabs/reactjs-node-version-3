@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 function Timeline() {
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [permission, setPermission] = useState("");
-  // const [coords, setCoords] = useState({ latitude: null, longitude: null });
+  const [position, setPosition] = useState({ latitude: null, longitude: null });
   const [routesResponse, setRoutesResponse] = useState(null);
   const [distance, setDistance] = useState(0);
 
@@ -60,10 +60,16 @@ function Timeline() {
   //config for watching users current location
   // ..watching position changes
   useEffect(() => {
+    // Define a variable to store the watchId
+    let watchId;
+
     // Define an success callback function
-    const successHandler = (position) => {
-      const { latitude, longitude } = position.coords;
-      doSendCoords({ latitude, longitude });
+    const successHandler = (pos) => {
+      const { latitude, longitude } = pos.coords;
+      if (position.latitude !== latitude || position.longitude !== longitude) {
+        doSendCoords({ latitude, longitude });
+        setPosition({ ...position, latitude, longitude });
+      }
     };
 
     // Define an error callback function
@@ -71,16 +77,34 @@ function Timeline() {
       console.error("Error getting location:", error.message);
     };
 
-    const watchId =
-      user.isTrackingEnabled &&
-      navigator.geolocation.watchPosition(successHandler, errorHandler, {
-        enableHighAccuracy: true,
-      });
+    //defining watch postion with interval
+    const watchPositionWithInterval = () => {
+      watchId = navigator.geolocation.watchPosition(
+        successHandler,
+        errorHandler,
+        {
+          enableHighAccuracy: true,
+        }
+      );
 
-    return () => {
-      navigator.geolocation.clearWatch(watchId);
+      // console.log("tracking in progress");
     };
-  }, [doSendCoords, user.isTrackingEnabled]);
+
+    // Check if tracking is enabled before setting up the interval
+    if (user.isTrackingEnabled) {
+      watchPositionWithInterval();
+      //set interval to call watch position every 5mins
+      const intervalId = setInterval(watchPositionWithInterval, 5 * 60 * 1000);
+
+      // Return cleanup function when component unmounts
+      return () => {
+        navigator.geolocation.clearWatch(watchId);
+        clearInterval(intervalId);
+      };
+    }
+
+    return () => {};
+  }, [doSendCoords, user.isTrackingEnabled, position]);
 
   //setting permissions
   useEffect(() => {
