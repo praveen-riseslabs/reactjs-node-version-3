@@ -3,70 +3,165 @@ import { StyleSheet, View } from "react-native";
 import {
   Button,
   Divider,
-  RadioButton,
+  HelperText,
   Text,
   TextInput,
 } from "react-native-paper";
 import { COLORS, MARGINS, PADDINGS, SPACES } from "../constants";
-import { useState } from "react";
 import CTextInput from "../components/miscs/CTextInput";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useThunk } from "../hooks/useThunk";
+import { loginUser } from "../store";
+import { useSelector } from "react-redux";
+import { Controller, useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 function Login() {
-  const [userData, setUserData] = useState({
-    usernameOrPassword: "",
-    password: "",
-  });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({ mode: "onBlur" });
+  const [
+    doLoginUser,
+    loadingUserLogin,
+    errorLoadingUserLogin,
+    resetErrorUserLogin,
+    isLoginSuccessful,
+    resetIsLoginSuccessful,
+  ] = useThunk(loginUser);
+  const { isLoggedIn } = useSelector((state) => state.user);
 
   const { navigate } = useNavigation();
-  
-  console.log(userData);
+
+  const onLogin = (data) => {
+    doLoginUser(data);
+    if (isLoginSuccessful) {
+      resetIsLoginSuccessful();
+      reset();
+    }
+  };
+
+  useFocusEffect(() => {
+    if (!isLoggedIn) return;
+
+    navigate("home");
+  });
+
+  useEffect(() => {
+    if (!errorLoadingUserLogin) return;
+
+    const timer = setTimeout(resetErrorUserLogin, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [errorLoadingUserLogin]);
 
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
         style={{ flex: 1 }}
-        colors={[COLORS.secondary, COLORS.primary, COLORS.secondary]}
+        colors={[
+          COLORS.secondaryHalf,
+          COLORS.primaryHalf,
+          COLORS.secondaryHalf,
+        ]}
       >
         <View style={S.formContainer}>
           <View style={S.header}>
             <Text style={S.headerText} variant="headlineSmall">
               Login
             </Text>
-            <Divider style={S.divider} bold />
+            <Divider style={S.divider} />
           </View>
           <View style={S.form}>
-            <TextInput
-              placeholderTextColor="gray"
-              label="Username or Email"
-              style={S.textField}
-              value={userData.usernameOrPassword}
-              placeholder="Enter Username or email"
-              onChangeText={(e) =>
-                setUserData({ ...userData, usernameOrPassword: e })
-              }
+            <Controller
+              control={control}
+              name="usernameOrEmail"
+              render={({ field: { onChange, value, onBlur } }) => {
+                return (
+                  <TextInput
+                    placeholderTextColor="gray"
+                    label="Username or Email"
+                    style={S.textField}
+                    value={value}
+                    placeholder="Enter Username or email"
+                    onChangeText={(e) => onChange(e)}
+                    onBlur={onBlur}
+                  />
+                );
+              }}
+              rules={{
+                required: {
+                  value: true,
+                  message: "Fields must not be empty",
+                },
+              }}
             />
-            <CTextInput
-              placeholderTextColor="gray"
-              label="Password"
-              secureTextEntry
-              showVisibilityBtn
-              value={userData.password}
-              placeholder="Enter Password"
-              onChangeText={(e) => setUserData({ ...userData, password: e })}
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onBlur, onChange, value } }) => {
+                return (
+                  <CTextInput
+                    placeholderTextColor="gray"
+                    label="Password"
+                    secureTextEntry
+                    showVisibilityBtn
+                    value={value}
+                    placeholder="Enter Password"
+                    onChangeText={(e) => onChange(e)}
+                    onBlur={onBlur}
+                  />
+                );
+              }}
+              rules={{
+                required: {
+                  value: true,
+                  message: "Fields must not be empty",
+                },
+              }}
             />
+
+            {/* errors */}
+            <View>
+              <HelperText
+                type="error"
+                visible={
+                  errors.usernameOrEmail ||
+                  errors.password ||
+                  errorLoadingUserLogin
+                }
+              >
+                {errors.usernameOrEmail?.message ||
+                  errors.password?.message ||
+                  errorLoadingUserLogin}
+              </HelperText>
+            </View>
             <View style={S.actionsContainer}>
-              <Button mode="contained" style={S.button} rippleColor={"red"}>
+              <Button
+                loading={loadingUserLogin}
+                disabled={errorLoadingUserLogin}
+                rippleColor={COLORS.primaryHalf}
+                mode="contained"
+                style={S.button}
+                onPress={handleSubmit(onLogin)}
+              >
                 <Text style={{ color: "white" }}>LOGIN</Text>
               </Button>
             </View>
             <View style={S.navigationContainer}>
-              <Text variant="bodyLarge" style={{ color: "#bababa" }}>
-                Don't have an account?
-              </Text>
+              <Text variant="bodyLarge">Don't have an account?</Text>
               <Text
                 onPress={() => navigate("register")}
-                style={{ color: COLORS.primary, fontWeight: "bold" }}
+                style={{
+                  color: COLORS.primary,
+                  fontWeight: "bold",
+                  borderBottomColor: COLORS.secondary,
+                  borderBottomWidth: 1,
+                }}
               >
                 Register
               </Text>
@@ -92,6 +187,7 @@ const S = StyleSheet.create({
   },
   divider: {
     marginVertical: 10,
+    backgroundColor: COLORS.secondary,
   },
   form: {
     gap: SPACES().sm,
