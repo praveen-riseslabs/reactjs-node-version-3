@@ -9,12 +9,14 @@ function CTextInput({
   secureTextEntry = false,
   placeholder = "",
   showVisibilityBtn = false,
+  placeholderTextColor = "gray",
+  onBlur,
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const type = secureTextEntry && isVisible ? "visible-password" : undefined;
 
   const onBtnClick = () => setIsVisible(!isVisible);
-  
+
   return (
     <TextInput
       label={label}
@@ -22,6 +24,8 @@ function CTextInput({
       keyboardType={type}
       secureTextEntry={secureTextEntry}
       placeholder={placeholder}
+      placeholderTextColor={placeholderTextColor}
+      onBlur={onBlur}
       right={
         <TextInput.Icon
           icon={() => (
