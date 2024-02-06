@@ -69,18 +69,14 @@ function Registration() {
     <ScrollView style={{ flex: 1 }}>
       <LinearGradient
         style={{ flex: 1 }}
-        colors={[
-          COLORS.secondaryHalf,
-          COLORS.primaryHalf,
-          COLORS.secondaryHalf,
-        ]}
+        colors={[COLORS.secondary, "transparent"]}
       >
         <View style={S.formContainer}>
           <View style={S.header}>
             <Text style={S.headerText} variant="headlineSmall">
               Registration
             </Text>
-            <Divider style={S.divider} />
+            {/* <Divider style={S.divider} /> */}
           </View>
           <View style={S.form}>
             {/* fullname */}
@@ -92,6 +88,7 @@ function Registration() {
                   return (
                     <TextInput
                       placeholderTextColor="gray"
+                      activeUnderlineColor={COLORS.primary}
                       style={S.textField}
                       label="FullName"
                       value={value}
@@ -125,6 +122,7 @@ function Registration() {
                   return (
                     <TextInput
                       placeholderTextColor="gray"
+                      activeUnderlineColor={COLORS.primary}
                       label="Username"
                       style={S.textField}
                       value={value}
@@ -162,6 +160,7 @@ function Registration() {
                   return (
                     <TextInput
                       placeholderTextColor="gray"
+                      activeUnderlineColor={COLORS.primary}
                       label="Email"
                       value={value}
                       keyboardType="email-address"
@@ -199,6 +198,7 @@ function Registration() {
                   return (
                     <TextInput
                       placeholderTextColor="gray"
+                      activeUnderlineColor={COLORS.primary}
                       label="Phone Number"
                       value={value}
                       keyboardType="number-pad"
@@ -347,21 +347,21 @@ function Registration() {
                 <Text style={{ color: "white" }}>REGISTER</Text>
               </Button>
             </View>
-            <View style={S.navigationContainer}>
-              <Text variant="bodyLarge">Already have an account?</Text>
-              <Text
-                onPress={() => navigate("login")}
-                style={{
-                  color: COLORS.primary,
-                  fontWeight: "bold",
-                  borderBottomColor: COLORS.secondary,
-                  borderBottomWidth: 1,
-                }}
-              >
-                Login
-              </Text>
-            </View>
           </View>
+        </View>
+        <View style={S.navigationContainer}>
+          <Text variant="bodyLarge">Already have an account?</Text>
+          <Text
+            onPress={() => navigate("login")}
+            style={{
+              color: COLORS.primary,
+              fontWeight: "bold",
+              borderBottomColor: COLORS.secondary,
+              borderBottomWidth: 1,
+            }}
+          >
+            Login
+          </Text>
         </View>
       </LinearGradient>
     </ScrollView>
@@ -413,6 +413,7 @@ const S = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: SPACES().xsm,
+    marginTop: MARGINS().md,
   },
   helperText: {
     paddingTop: 0,

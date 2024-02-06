@@ -1,6 +1,7 @@
 export const COLORS = {
-  primary: "#009dff",
-  primaryHalf: "#009dff80",
-  secondary: "#8a2be2",
-  secondaryHalf: "#8a2ce280",
+  primary: "#8F2334",
+  secondary: "#161725",
+  text_primary: "#fff",
+  text_secondary: "#969799",
+  text_dark: "#60616B",
 };
