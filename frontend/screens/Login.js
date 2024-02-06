@@ -63,18 +63,14 @@ function Login() {
     <View style={{ flex: 1 }}>
       <LinearGradient
         style={{ flex: 1 }}
-        colors={[
-          COLORS.secondaryHalf,
-          COLORS.primaryHalf,
-          COLORS.secondaryHalf,
-        ]}
+        colors={[COLORS.secondary, "transparent"]}
       >
         <View style={S.formContainer}>
           <View style={S.header}>
-            <Text style={S.headerText} variant="headlineSmall">
+            <Text style={S.headerText} variant="headlineLarge">
               Login
             </Text>
-            <Divider style={S.divider} />
+            {/* <Divider style={S.divider} /> */}
           </View>
           <View style={S.form}>
             <Controller
@@ -84,6 +80,7 @@ function Login() {
                 return (
                   <TextInput
                     placeholderTextColor="gray"
+                    activeUnderlineColor={COLORS.primary}
                     label="Username or Email"
                     style={S.textField}
                     value={value}
@@ -144,7 +141,7 @@ function Login() {
               <Button
                 loading={loadingUserLogin}
                 disabled={errorLoadingUserLogin}
-                rippleColor={COLORS.primaryHalf}
+                rippleColor={COLORS.primary}
                 mode="contained"
                 style={S.button}
                 onPress={handleSubmit(onLogin)}
@@ -152,21 +149,21 @@ function Login() {
                 <Text style={{ color: "white" }}>LOGIN</Text>
               </Button>
             </View>
-            <View style={S.navigationContainer}>
-              <Text variant="bodyLarge">Don't have an account?</Text>
-              <Text
-                onPress={() => navigate("register")}
-                style={{
-                  color: COLORS.primary,
-                  fontWeight: "bold",
-                  borderBottomColor: COLORS.secondary,
-                  borderBottomWidth: 1,
-                }}
-              >
-                Register
-              </Text>
-            </View>
           </View>
+        </View>
+        <View style={S.navigationContainer}>
+          <Text variant="bodyLarge">Don't have an account?</Text>
+          <Text
+            onPress={() => navigate("register")}
+            style={{
+              color: COLORS.primary,
+              fontWeight: "bold",
+              borderBottomColor: COLORS.secondary,
+              borderBottomWidth: 1,
+            }}
+          >
+            Register
+          </Text>
         </View>
       </LinearGradient>
     </View>
@@ -177,7 +174,11 @@ export default Login;
 
 const S = StyleSheet.create({
   header: { paddingVertical: 10 },
-  headerText: { textAlign: "center", color: "white", fontWeight: "bold" },
+  headerText: {
+    paddingHorizontal: PADDINGS().md,
+    color: COLORS.text_primary,
+    fontWeight: "bold",
+  },
   formContainer: {
     flex: 1,
     paddingBottom: 20,
@@ -219,5 +220,6 @@ const S = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: SPACES().xsm,
+    marginBottom: MARGINS().md,
   },
 });
