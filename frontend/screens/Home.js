@@ -9,7 +9,7 @@ function Home() {
   const { navigate } = useNavigation();
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !Object.values(user).length) {
       navigate("login");
     }
   }, []);
