@@ -15,3 +15,12 @@ CREATE TABLE
         password TEXT NOT NULL,
         gender gender_enum DEFAULT 'preferNotToSay'
     );
+
+-- otp table
+CREATE TABLE
+    otps (
+        id UUID NOT NULL PRIMARY KEY,
+        user_id UUID NOT NULL REFERENCES users(id) ,
+        otp TEXT NOT NULL,
+        created_at TIMESTAMP NOT NULL
+    );

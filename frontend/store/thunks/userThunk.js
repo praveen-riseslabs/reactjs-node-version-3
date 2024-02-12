@@ -5,18 +5,11 @@ import { userApi } from "../api";
 const registerUser = createAsyncThunk("user/register", async (data) => {
   try {
     const res = await userApi.post("/register", data);
-   await useTimer(2)
     return res.data;
   } catch (err) {
     throw Error(err.response.data.error);
   }
 });
-
-async function useTimer(d) {
-  return new Promise((res) => {
-    setTimeout(res, d * 1000);
-  });
-}
 
 //login user
 const loginUser = createAsyncThunk("user/login", async (data) => {
@@ -40,4 +33,50 @@ const getUserDetails = createAsyncThunk("user/details", async () => {
   }
 });
 
-export { registerUser, loginUser, getUserDetails };
+//send otp
+const sendPasswordResetOtp = createAsyncThunk(
+  "user/password-reset-otp",
+  async (email) => {
+    try {
+      const res = await userApi.post("/password-recovery", { email });
+      return res.data;
+    } catch (err) {
+      throw Error(err.response.data.error);
+    }
+  }
+);
+
+//verifying the entered otp
+const verifyPasswordResetOtp = createAsyncThunk(
+  "user/verify-password-reset-otp",
+  async (data) => {
+    try {
+      const res = await userApi.post("/otp-verify", data);
+      return res.data;
+    } catch (err) {
+      throw Error(err.response.data.error);
+    }
+  }
+);
+
+//reseting password
+const resetPassword = createAsyncThunk(
+  "user/reseting-password",
+  async (data) => {
+    try {
+      const res = await userApi.put("/reset-password", data);
+      return res.data;
+    } catch (err) {
+      throw Error(err.response.data.error);
+    }
+  }
+);
+
+export {
+  registerUser,
+  loginUser,
+  getUserDetails,
+  sendPasswordResetOtp,
+  verifyPasswordResetOtp,
+  resetPassword,
+};

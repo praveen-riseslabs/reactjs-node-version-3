@@ -2,7 +2,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, View } from "react-native";
 import {
   Button,
-  Divider,
   HelperText,
   Text,
   TextInput,
@@ -109,7 +108,7 @@ function Login() {
                     showVisibilityBtn
                     value={value}
                     placeholder="Enter Password"
-                    onChangeText={(e) => onChange(e)}
+                    onChangeText={onChange}
                     onBlur={onBlur}
                   />
                 );
@@ -163,6 +162,20 @@ function Login() {
             }}
           >
             Register
+          </Text>
+        </View>
+        <View style={S.navigationContainer}>
+          <Text variant="bodyLarge">forgot password?</Text>
+          <Text
+            onPress={() => navigate("reset-password")}
+            style={{
+              color: COLORS.primary,
+              fontWeight: "bold",
+              borderBottomColor: COLORS.secondary,
+              borderBottomWidth: 1,
+            }}
+          >
+            Reset Password
           </Text>
         </View>
       </LinearGradient>
