@@ -5,14 +5,16 @@ import { COLORS, MARGINS, PADDINGS } from "../constants";
 import { useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useThunk } from "../hooks/useThunk";
-import { verifyPasswordResetOtp } from "../store";
+import { sendPasswordResetOtp, verifyPasswordResetOtp } from "../store";
 import { useSelector } from "react-redux";
 
 function Otp() {
   const [otp, setOtp] = useState("");
+  const [isResendReqDisabled, setIsResendReqDisabled] = useState(true);
   const { goBack, replace } = useNavigation();
   const [time, setTime] = useState({ minutes: 10, seconds: 0 });
   const { resetPass } = useSelector((state) => state.user);
+  const [timeExpired, setTimeExpired] = useState(false);
 
   const route = useRoute();
   const { email } = route.params;
@@ -25,8 +27,15 @@ function Otp() {
     isVerifyOtpRan,
   ] = useThunk(verifyPasswordResetOtp);
 
+  const [
+    doSendOtp,
+    loadingSentOtp,
+    errorLoadingSentOtp,
+    resetErrorLoadingSentOtp,
+  ] = useThunk(sendPasswordResetOtp);
+
   const handleVerifyOtp = () => {
-    // if (!resetPass.user_id || !resetPass.id) return;
+    if (!resetPass.user_id || !resetPass.id) return;
     if (!email) return;
     const data = { otp, userId: resetPass.user_id, id: resetPass.id };
     doVerifyOtp(data);
@@ -52,17 +61,36 @@ function Otp() {
   }, [errorLoadingVerifyOtp]);
 
   useEffect(() => {
+    if (!errorLoadingSentOtp) return;
+
+    let timer = setTimeout(resetErrorLoadingSentOtp, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [errorLoadingSentOtp]);
+
+  useEffect(() => {
+    if (time.minutes === 9 || time.seconds === 0) {
+      setIsResendReqDisabled(false);
+    }
+  }, [time.minutes]);
+  // console.log(time.minutes, " ",time.seconds);
+
+  useEffect(() => {
     let timeRemaining = 10 * 60 * 1000;
 
-    function updateTimer(m) {
+    function updateTimer() {
       const min = Math.floor(timeRemaining / (60 * 1000));
       const sec = Math.floor((timeRemaining % (60 * 1000)) / 1000);
 
       if (timeRemaining <= 0) {
         clearInterval(timerInterval);
+        setTimeExpired(true);
       } else {
-        timeRemaining -= 1 * 1000;
+        timeRemaining -= 10 * 1000;
       }
+
       setTime({ ...time, minutes: min, seconds: sec });
     }
 
@@ -127,13 +155,35 @@ function Otp() {
           </Button>
           <Button
             loading={loadingVerifyOtp}
-            disabled={errorLoadingVerifyOtp}
+            disabled={errorLoadingVerifyOtp || timeExpired}
             rippleColor={COLORS.primary}
             mode="contained"
             style={S.button}
             onPress={handleVerifyOtp}
           >
             <Text style={{ color: "white" }}>Verify OTP</Text>
+          </Button>
+        </View>
+        <View style={S.resetOtpContainer}>
+          <HelperText type="error" visible={true}>
+            {errorLoadingSentOtp && errorLoadingSentOtp}
+          </HelperText>
+          <Button
+            loading={loadingSentOtp}
+            disabled={errorLoadingSentOtp || isResendReqDisabled}
+            rippleColor={COLORS.secondary}
+            mode="contained-tonal"
+            style={S.cancelbutton}
+            onPress={() => {
+              if (isResendReqDisabled) return;
+              doSendOtp(email);
+              if (!errorLoadingSentOtp) {
+                setTime({ ...time, minutes: 10, seconds: 0 });
+                return
+              }
+            }}
+          >
+            <Text style={{ color: "orange" }}>Re-send OTP</Text>
           </Button>
         </View>
       </LinearGradient>
@@ -174,6 +224,12 @@ const S = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
+    marginTop: 15,
+  },
+  resetOtpContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 15,
   },
   button: {

@@ -32,8 +32,7 @@ function NewPassword() {
       id,
     };
 
-    replace("login");
-    // doResetPassword(data);
+    doResetPassword(data);
   };
 
   useEffect(() => {
